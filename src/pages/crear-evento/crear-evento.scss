@@ -1,0 +1,49 @@
+page-crear-evento {
+    .top{
+        width: 100%;
+        height: auto;
+        margin-top: 0px;
+        top:0px;
+        // background: black;
+        border: 2px;
+    }
+    .palette
+    {
+        top:0px;
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        // background:black;
+    }
+
+    .form_cei{
+        // margin-top: 30px;
+        display:flex;
+        flex-direction: column;
+        // background:skyblue;
+    }
+    .citem{
+        // background: yellow;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .icon-bottom{
+        padding-right: 3px;
+    }
+
+    // .searchbar-md .searchbar-input::-webkit-input-placeholder
+    .textarea::-webkit-input-placeholder
+    {
+        display: flex;
+        align-items: flex-end;
+        color: yellow;
+
+    }
+    
+    // .ion-checkbox
+    // {
+    //     $checkbox-md-item-start-margin-end
+    // }
+    
+}

@@ -1,0 +1,152 @@
+<!--
+  Generated template for the VerEventoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="primary">
+  	<ion-title>Nuevo evento</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<div class="top">
+		<div class="palette">
+			<i class="ico-gray fas fa-palette fa-2x"></i> 
+		</div>
+	</div>
+	<div class="form_cei">
+
+		<div class="citem">
+			<div class="icon-center">
+				<i class="ico-gray far fa-edit fa-lg"></i>
+			</div>
+			<ion-item>
+				<ion-label floating>Título</ion-label>
+				<ion-input type="text" [(ngModel)]="event.title"></ion-input>	 
+			</ion-item>
+		</div>
+		
+		<div class="citem">
+			<div class="icon-center">
+				<i class="ico-gray fas fa-map-marker-alt fa-lg"></i>
+			</div>
+			<ion-item>
+				<ion-label floating>Dirección</ion-label>
+				<ion-input type="text" [(ngModel)]="event.location"></ion-input>
+			</ion-item>
+		</div>
+		
+		<div class="citem">
+			<div class="icon-center">
+				<i class="ico-gray fas fa-clock fa-lg"></i>
+			</div>
+			<ion-item style="display:flex; justify-content: space-around;">
+				<ion-input style="display:none;"></ion-input>
+				<ion-label style="margin-top: 20px;" ><span>Todo el día</span> </ion-label>
+				<ion-checkbox item-right style="margin-top: 15px;" floating (ionChange)="disableTime()" [(ngModel)]="event.allday"></ion-checkbox>
+			</ion-item>
+		</div>
+
+		<div id="Time">
+			<div class="citem">
+				<div class="icon-center">
+					<i class="ico-gray fas fa-calendar fa-lg"></i>
+				</div>
+				<ion-item>
+					<ion-label floating>Fecha inicial</ion-label>
+					<ion-datetime max="2030-12-31" displayFormat="DD/MMM/YY hh:mm:a" pickerFormat="DD/MMM/YY hh:mm:a" [(ngModel)]="event.startDate"></ion-datetime>
+				</ion-item>
+			</div>
+			
+			<div class="citem">
+				<div class="icon-center">
+					<i class="ico-gray fas fa-calendar fa-lg"></i>
+				</div>
+				<ion-item>
+					<ion-label floating>Fecha final</ion-label>
+					<ion-datetime max="2030-12-31" displayFormat="DD/MMM/YY hh:mm:a" pickerFormat="DD/MMM/YY hh:mm:a" (ionChange)="validateTime()" [(ngModel)]="event.endDate"></ion-datetime>
+				</ion-item>
+			</div>
+		</div>
+	
+	
+		<div class="citem">
+			<div class="icon-center">
+				<i class="ico-gray fas fa-retweet fa-lg"></i>
+			</div>
+			<ion-item>
+				<ion-label floating>Repetición</ion-label>
+				<ion-select [(ngModel)]="event.repeat"> 
+					<ion-option value="no">
+						No se repite
+					</ion-option>
+					<ion-option value="dias">
+						Todos los días
+					</ion-option>
+					<ion-option value="semanas">
+						Todas las semanas
+					</ion-option>
+					<ion-option value="meses">
+						Todos los meses
+					</ion-option>
+					<ion-option value="años">
+						Todos los años
+					</ion-option>
+					<!-- <ion-option value="mujer">
+						Personalización
+					</ion-option> -->
+				</ion-select>
+			</ion-item>
+		</div>
+
+		<div class="citem">
+			<div class="icon-center">
+				<i class="ico-gray fas fa-bell fa-lg"></i>
+			</div>
+			<ion-item>
+				<ion-label floating>Recordatorio</ion-label>
+				<ion-select [(ngModel)]="event.reminder">
+					<ion-input type="number" [(ngModel)]="event.tiempoAntes"></ion-input>
+					<ion-option value="no">
+						Sin recordatorio
+					</ion-option>
+					<ion-option value="minutos">
+						Minutos antes
+					</ion-option>
+					<ion-option value="horas">
+						Horas antes
+					</ion-option>
+					<ion-option value="dias">
+						Días antes
+					</ion-option>
+					<ion-option value="semanas">
+						Semanas antes
+					</ion-option>
+					<!-- <ion-option value="mujer">
+						Personalización
+					</ion-option> -->
+				</ion-select>
+			</ion-item>
+		</div>
+	
+		<div class="citem">
+			<div class="icon-center">
+				<i class="ico-gray fas fa-align-justify fa-lg"></i>
+			</div>
+			<ion-item>
+					<ion-label floating>Descripción</ion-label>
+				<ion-textarea [(ngModel)]="event.description"></ion-textarea>
+			</ion-item>
+		</div>
+		
+	</div>
+
+	<br><br>
+	
+	<div padding>
+		<button ion-button block (click)="crearEvento()">Guardar</button>
+	</div>
+
+</ion-content>

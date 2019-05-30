@@ -1,0 +1,74 @@
+<!--
+  Generated template for the VistaDiariaPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{theDate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<div class="newEvent">
+		<button class="navbutton" icon-only color="light" (click)="monthly_view()">
+	  		<ion-icon class="icons" name="md-calendar"></ion-icon>
+		</button>
+		<button class="navbutton" icon-only color="light" (click)="newEvent()">
+	  		<ion-icon class="icons" name="add"></ion-icon>
+		</button>
+	</div>
+	<br><br>
+	
+	<div class="event_list">
+		<div class="item_event_list" *ngFor="let event of events1">
+			<ion-card class="reales" (click)="editarEvento(event.id, event.dstartDate)">
+				<ion-card-header>
+					<ion-card-title >
+						{{ event.title }}
+					</ion-card-title>
+				</ion-card-header>
+				
+				<ion-card-content>
+					{{ event.dstartDate }}
+				</ion-card-content>
+			</ion-card>
+		</div>
+	</div>
+	
+	<ion-label>
+		Sugerencias
+	</ion-label>
+
+	<ion-item *ngFor="let event of events1">
+		<ion-row>
+	    	<ion-col col-10>
+	    		<ion-card class="sugerencias">
+					<ion-card-header>
+			    		<ion-card-title >
+			    			{{ event.title }}
+			    		</ion-card-title>
+					</ion-card-header>
+
+					<ion-card-content>
+				    	{{ event.startDate }}
+					</ion-card-content>
+				</ion-card>
+	    	</ion-col>
+	    	<ion-col col-2 align-self-left text-center>
+	    		<ion-row>
+		    		<button class="simbolo" ion-button icon-only outline item-right clear>
+		        		<ion-icon name="checkmark-circle"></ion-icon>
+		        	</button>
+		        </ion-row>
+		        <ion-row>
+		        	<button class="simbolo" ion-button icon-only outline item-right clear>
+		        		<ion-icon name="close-circle"></ion-icon>
+		       		</button>
+		       	</ion-row>
+	    	</ion-col>
+		</ion-row>
+	</ion-item>
+</ion-content>

@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-navbar>
+      <ion-title>
+        Ionic Blank
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+  
+  <ion-content padding>
+    The world is your oyster.
+    <p>
+      If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
+    </p>
+  
+    <!-- <button ion-button (click) ="goWel()">Ir a wel</button> -->
+    <br><br><br>
+  
+    <ion-list>
+      <div class="user_list">
+        <div class="item_user_list" *ngFor="let user of users">
+          <button class="user_bt" ion-item  (click)="editarUsuario(user.id)">
+            {{ user.nombre }}
+          </button>
+          <button class="delete_bt" ion-item  color="danger" (click)="dddd(user.id)" >
+              X
+          </button> 
+        </div>
+      </div>
+    </ion-list>
+  
+    
+    <button ion-button block (click)="registrarse()">Crear usuario</button>
+  </ion-content>
+  

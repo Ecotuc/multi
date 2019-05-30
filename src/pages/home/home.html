@@ -1,0 +1,42 @@
+<ion-header>
+    <!-- <script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js" integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH" crossorigin="anonymous"></script> -->
+    
+    <ion-navbar>
+    <ion-title>
+      Inicio
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <!-- The world is your oyster.
+  <p>
+    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
+  </p>
+
+  <!-- <button ion-button (click) ="goWel()">Ir a wel</button> -->
+  <!-- <br><br><br> -->
+
+  <img class="icon" src="assets/imgs/calendar.svg.png">
+  <!-- <br> -->
+
+  <ion-list padding>
+
+    <ion-item>
+      <ion-label floating>Username</ion-label>
+      <ion-input type="text" [(ngModel)]="username"></ion-input>
+    </ion-item>
+ 
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+
+  </ion-list>
+
+  
+  <div padding>
+      <button ion-button block (click)="iniciarSesion()">Iniciar sesión</button>
+      <button ion-button block (click)="registrarse()">Registro</button>
+    </div>
+</ion-content>

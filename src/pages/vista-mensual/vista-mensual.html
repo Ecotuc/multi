@@ -1,0 +1,46 @@
+<!--
+  Generated template for the VistaMensualPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      My Calendar App
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content >
+  <div class="all">
+    <div class="calendar-header">
+      <ion-row class="calendar-month">
+        <ion-col col-2 (click)="goToLastMonth()"><ion-icon name="arrow-back"></ion-icon></ion-col>
+        <ion-col col-8>{{currentMonth}} {{currentYear}}</ion-col>
+        <ion-col col-2 (click)="goToNextMonth()"><ion-icon name="arrow-forward"></ion-icon></ion-col>
+      </ion-row>
+    </div>
+    <div class="calendar-body">
+      <ion-grid>
+        <ion-row class="calendar-weekday">
+          <ion-col>DOM</ion-col>
+          <ion-col>LUN</ion-col>
+          <ion-col>MAR</ion-col>
+          <ion-col>MIÉ</ion-col>
+          <ion-col>JUE</ion-col>
+          <ion-col>VIE</ion-col>
+          <ion-col>SÁB</ion-col>
+        </ion-row>
+        <ion-row class="calendar-date">
+          <ion-col col-1 *ngFor="let lastDay of daysInLastMonth" class="last-month" (click)="vista_diaria(lastDay, this.date.getMonth(), currentYear)">{{lastDay}}</ion-col>
+          <ion-col col-1 class="everyDay" *ngFor="let day of daysInThisMonth" (click)="vista_diaria(day, this.date.getMonth(), currentYear)">
+            <span class="currentDate"  *ngIf="currentDate === day; else otherDate">{{day}}</span>
+            <ng-template #otherDate class="otherDate">{{day}}</ng-template>
+          </ion-col>
+          <ion-col col-1 *ngFor="let nextDay of daysInNextMonth" class="next-month" (click)="vista_diaria(nextDay, this.date.getMonth(), currentYear)">{{nextDay}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

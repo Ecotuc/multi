@@ -1,0 +1,121 @@
+page-vista-mensual {
+    
+    .all {
+        height: 100%;
+        margin-bottom: 0px;
+    }
+
+    [col-1] 
+    {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 8.33333%;
+        -ms-flex: 0 0 8.33333%;
+        flex: 0 0 14.285714285714286%;
+        width: 14.285714285714286%;
+        max-width: 14.285714285714286%;
+    }
+
+    .col
+    {
+        text-align: center;
+        padding: 5px;
+    }
+
+    .calendar-date .last-month,  .calendar-date .next-month, .calendar-date .everyDay
+    {
+        font-size: 20px;
+        padding-top: 28px;
+        padding-bottom: 28px;
+    }
+
+    .last-month, .next-month 
+    {
+        color: #999999;
+        // font-size: 90%;
+    }
+
+    .currentDate, .otherDate 
+    {
+        padding: 5px;
+    }
+
+    .currentDate 
+    {
+        font-weight: bold;
+        background-color: #999999;
+        color: white;
+        border-radius: 30px;
+    }
+
+    .calendar-header 
+    {
+        height: 7%;
+        background-color: #488AFF;
+        color: #FFFFFF;
+        font-size: 24px;
+    }
+
+    .event-bullet 
+    {
+        margin: 2px auto;
+        height: 5px;
+        width: 5px;
+        background-color: green;
+        border-radius: 30px;
+    }
+
+    .selected-date 
+    {
+        width: 20px;
+        height: 2px;
+        background-color: blue;
+    }
+
+    .unselected-date 
+    {
+        border: none;
+    }
+
+    .calendar-body  
+    .grid 
+    {
+        padding: 0;
+    }
+
+    .calendar-body
+    {
+        height: 93%;
+    }
+    
+    .grid
+    {
+        height: 100%;
+    }
+
+    .col:last-child 
+    {
+        border-right: none;
+    }
+    
+    .calendar-weekday, .calendar-date 
+    {
+        text-align: center;
+        margin: 0;
+    }
+    
+    .calendar-weekday 
+    {
+        height: 6%;
+        font-size: 18px;
+        // font-weight: bold;
+        border-bottom: solid 1px darkblue;
+        background-color: skyblue;
+    }
+    
+    .calendar-date 
+    {
+        height: 94%;
+        border-top: solid 1px darkblue;
+        border-bottom: solid 1px darkblue;
+    }
+}

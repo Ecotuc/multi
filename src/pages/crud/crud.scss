@@ -1,0 +1,14 @@
+page-crud {
+    .item_user_list{
+        display: flex;
+        justify-content: space-between;
+    }
+    .user_bt{
+        width: 40%;
+    }
+    .delete_bt{
+        width: auto;
+        height: 10px;
+        border-radius: 100%;
+    }
+}
