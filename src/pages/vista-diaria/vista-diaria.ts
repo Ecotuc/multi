@@ -26,6 +26,7 @@ export class VistaDiariaPage {
   eid = null;
   day = null;
   month = null;
+  montha = null;
   year = null;
   aux = null;
   aux2 = null;
@@ -40,6 +41,17 @@ export class VistaDiariaPage {
   fday = null;
   fmonth = null;
   fyear = null;
+  eday = false;
+  emonth = false;
+  eyear = null;
+  esday = null;
+  esmonth = false;
+  esyear = false;
+  efday = false;
+  efmonth = false;
+  efyear = false;
+  value = false;
+ 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public eventServices: EventServices) {
     this.uid = navParams.get('uid');
@@ -105,27 +117,43 @@ export class VistaDiariaPage {
 
   private validations()
   { 
-    var isValid = null;   
+    var isValid = null;  
+    // debugger 
     if (this.day == null || this.month == null || this.year == null) 
     {
       this.theDate = new Date();
       this.day = this.theDate.getDate();
       this.month = this.theDate.getMonth() + 1;
+      this.montha = this.month;
       this.year = this.theDate.getFullYear();
       this.month = this.month.toString();
+      this.montha = this.montha.toString();
       this.day = this.day.toString();
       if (this.month.length == 1) this.month = "0"+ this.month;
+      if (this.montha.length == 1) this.montha = "0"+ this.montha;
       if (this.day.length == 1) this.day = "0"+ this.day;
     }else
     {
+      this.montha = this.month;
+      if (this.month != 1) 
+      {
+        this.month = this.month-1;
+      }
+      else
+      {
+        this.month = 12;
+      }
+
       this.month = this.month.toString();
+      this.montha = this.montha.toString();
       this.day = this.day.toString();
       if (this.month.length == 1) this.month = "0"+ this.month;
+      if (this.montha.length == 1) this.montha = "0"+ this.montha;
       if (this.day.length == 1) this.day = "0"+ this.day;
       
       this.theDate = new Date(this.year , this.month , this.day);
     }
-    this.aux = this.year+"-"+ this.month +"-"+ this.day; 
+    this.aux = this.year+"-"+ this.montha +"-"+ this.day; 
     this.theDate = this.theDate.toDateString();
     this.eventServices.getEvents(this.uid).valueChanges().subscribe(events => 
     {
@@ -150,7 +178,7 @@ export class VistaDiariaPage {
     this.smonth = startDate.substr(5, 2);
     this.syear = startDate.substr(0,4);
 
-    this.fday = endDate.substr(8,9);
+    this.fday = endDate.substr(8,2);
     this.fmonth = endDate.substr(5, 2);
     this.fyear = endDate.substr(0,4);
 
@@ -171,13 +199,95 @@ export class VistaDiariaPage {
     this.amonth = parseInt(this.amonth, 10);
     this.ayear = parseInt(this.ayear, 10);
     // debugger
-    if (startDate == aux)
+    this.esday = this.aday != this.sday;
+    this.esmonth = this.amonth != this.smonth;
+    this.esyear = this.ayear != this.syear;
+    this.efday = this.aday != this.fday;
+    this.efmonth = this.amonth != this.fmonth;
+    this.efyear = this.ayear != this.fyear;
+    this.eday =  this.esday|| this.efday ? true:false;
+    this.emonth =  this.esmonth|| this.efmonth ? true:false;
+    this.eyear =  this.eyear|| this.efyear ? true:false;
+    
+    debugger
+    this. eyear = new Date(2019, 2, 25);
+    this. esday = new Date(2025, 2, 25);
+
+
+    if (startDate.substr(10,10) == aux)
     {
-      return true;
-    } 
-    else if (this.sday <= this.aday && this.aday <= this.fday) 
-      if (this.smonth <= this.amonth && this.amonth <= this.fmonth) 
-        if (this.syear <= this.ayear && this.ayear <= this.fyear) return true;
+      this.value = true;
+    } else if (this.syear <= this.ayear && this.ayear <= this.fyear && this.eyear) {
+      if (this.esyear) {
+        this.value = this.ayear > this.syear ? true:false;
+      }else{
+        if (this.ayear < this.fyear) {
+          if (this.smonth <= this.amonth && this.amonth <= this.fmonth && this.emonth){
+            if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
+              this.value = true;
+            }else{
+              return false;
+            }
+          }else{
+            if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
+              this.value = true;
+            }else{
+              return false;
+            }
+          }
+        }
+        this.value = this.ayear <= this.fyear ? true:false;
+      }
+    }else{
+      if (this.smonth <= this.amonth && this.amonth <= this.fmonth && this.emonth){
+        if (this.esmonth) {
+          this.value = this.amonth > this.smonth ? true:false;
+        }else{
+          if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
+            return true;
+          }else{
+            return false;
+          }
+        }
+      }else{
+        if(!this.eyear){
+          if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
+            return true;
+          }else{
+            return false;
+          }
+        }else{
+          return true;
+        }
+
+      }
+    }
+
+
+    return this.value;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    // else if (this.sday <= this.aday && this.aday <= this.fday) 
+    //   if (this.smonth <= this.amonth && this.amonth <= this.fmonth) 
+    //     if (this.syear <= this.ayear && this.ayear <= this.fyear) return true;
     
   }
 }
