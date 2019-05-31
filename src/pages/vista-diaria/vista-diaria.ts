@@ -143,17 +143,12 @@ export class VistaDiariaPage {
           this.sDate = new Date(this.all_events[i].startDate);
           this.sDate.setHours(23,59,59);
           this.aday = parseInt(this.all_events[i].startDate.substr(8,2), 10);
-          if(this.aday-1 == this.sDate.getDate() )
-          {
-            this.sDate.setDate(this.aday);
-          }
+          if(this.aday-1 == this.sDate.getDate()) this.sDate.setDate(this.aday);
           this.fDate = new Date(this.all_events[i].endDate);
           this.fDate.setHours(23,59,59);
           this.aday = parseInt(this.all_events[i].endDate.substr(8,2), 10);
-          if(this.aday-1 == this.sDate.getDate() )
-          {
-            this.sDate.setDate(this.aday);
-          }
+          if(this.aday-1 == this.sDate.getDate()) this.sDate.setDate(this.aday);
+          
           isValid =  this.valid_range(this.sDate, this.aux, this.fDate);
           if (isValid)this.events1.push(this.all_events[i]);   
           // debugger

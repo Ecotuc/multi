@@ -315,15 +315,13 @@ var VistaDiariaPage = /** @class */ (function () {
                     _this.sDate = new Date(_this.all_events[i].startDate);
                     _this.sDate.setHours(23, 59, 59);
                     _this.aday = parseInt(_this.all_events[i].startDate.substr(8, 2), 10);
-                    if (_this.aday - 1 == _this.sDate.getDate()) {
+                    if (_this.aday - 1 == _this.sDate.getDate())
                         _this.sDate.setDate(_this.aday);
-                    }
                     _this.fDate = new Date(_this.all_events[i].endDate);
                     _this.fDate.setHours(23, 59, 59);
                     _this.aday = parseInt(_this.all_events[i].endDate.substr(8, 2), 10);
-                    if (_this.aday - 1 == _this.sDate.getDate()) {
+                    if (_this.aday - 1 == _this.sDate.getDate())
                         _this.sDate.setDate(_this.aday);
-                    }
                     isValid = _this.valid_range(_this.sDate, _this.aux, _this.fDate);
                     if (isValid)
                         _this.events1.push(_this.all_events[i]);
