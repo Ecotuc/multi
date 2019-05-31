@@ -211,30 +211,13 @@ var VistaDiariaPage = /** @class */ (function () {
         this.eid = null;
         this.day = null;
         this.month = null;
-        this.montha = null;
         this.year = null;
         this.aux = null;
-        this.aux2 = null;
         this.theDate = null;
         this.theDate2 = null;
-        this.sday = null;
-        this.smonth = null;
-        this.syear = null;
+        this.sDate = null;
+        this.fDate = null;
         this.aday = null;
-        this.amonth = null;
-        this.ayear = null;
-        this.fday = null;
-        this.fmonth = null;
-        this.fyear = null;
-        this.eday = false;
-        this.emonth = false;
-        this.eyear = null;
-        this.esday = null;
-        this.esmonth = false;
-        this.esyear = false;
-        this.efday = false;
-        this.efmonth = false;
-        this.efyear = false;
         this.value = false;
         this.uid = navParams.get('uid');
         this.op = navParams.get('op');
@@ -299,21 +282,16 @@ var VistaDiariaPage = /** @class */ (function () {
         if (this.day == null || this.month == null || this.year == null) {
             this.theDate = new Date();
             this.day = this.theDate.getDate();
-            this.month = this.theDate.getMonth() + 1;
-            this.montha = this.month;
+            this.month = this.theDate.getMonth();
             this.year = this.theDate.getFullYear();
             this.month = this.month.toString();
-            this.montha = this.montha.toString();
             this.day = this.day.toString();
             if (this.month.length == 1)
                 this.month = "0" + this.month;
-            if (this.montha.length == 1)
-                this.montha = "0" + this.montha;
             if (this.day.length == 1)
                 this.day = "0" + this.day;
         }
         else {
-            this.montha = this.month;
             if (this.month != 1) {
                 this.month = this.month - 1;
             }
@@ -321,23 +299,32 @@ var VistaDiariaPage = /** @class */ (function () {
                 this.month = 12;
             }
             this.month = this.month.toString();
-            this.montha = this.montha.toString();
             this.day = this.day.toString();
             if (this.month.length == 1)
                 this.month = "0" + this.month;
-            if (this.montha.length == 1)
-                this.montha = "0" + this.montha;
             if (this.day.length == 1)
                 this.day = "0" + this.day;
-            this.theDate = new Date(this.year, this.month, this.day);
+            this.theDate = new Date(this.year, this.month, this.day, 23, 59, 59);
         }
-        this.aux = this.year + "-" + this.montha + "-" + this.day;
+        this.aux = new Date(this.year, this.month, this.day, 23, 59, 59);
         this.theDate = this.theDate.toDateString();
         this.eventServices.getEvents(this.uid).valueChanges().subscribe(function (events) {
             _this.all_events = events;
             if (_this.all_events.length > 0) {
                 for (var i = 0; i < _this.all_events.length; i++) {
-                    isValid = _this.valid_range(_this.all_events[i].startDate, _this.aux, _this.all_events[i].endDate);
+                    _this.sDate = new Date(_this.all_events[i].startDate);
+                    _this.sDate.setHours(23, 59, 59);
+                    _this.aday = parseInt(_this.all_events[i].startDate.substr(8, 2), 10);
+                    if (_this.aday - 1 == _this.sDate.getDate()) {
+                        _this.sDate.setDate(_this.aday);
+                    }
+                    _this.fDate = new Date(_this.all_events[i].endDate);
+                    _this.fDate.setHours(23, 59, 59);
+                    _this.aday = parseInt(_this.all_events[i].endDate.substr(8, 2), 10);
+                    if (_this.aday - 1 == _this.sDate.getDate()) {
+                        _this.sDate.setDate(_this.aday);
+                    }
+                    isValid = _this.valid_range(_this.sDate, _this.aux, _this.fDate);
                     if (isValid)
                         _this.events1.push(_this.all_events[i]);
                     // debugger
@@ -346,95 +333,8 @@ var VistaDiariaPage = /** @class */ (function () {
         });
     };
     VistaDiariaPage.prototype.valid_range = function (startDate, aux, endDate) {
-        startDate = new Date(startDate);
-        aux = new Date(aux);
-        endDate = new Date(endDate);
         this.value = startDate <= aux && aux <= endDate ? true : false;
         return this.value;
-        //get the day, month and year from each date
-        // debugger
-        // this.sday = startDate.substr(8,2);
-        // this.smonth = startDate.substr(5, 2);
-        // this.syear = startDate.substr(0,4);
-        // this.fday = endDate.substr(8,2);
-        // this.fmonth = endDate.substr(5, 2);
-        // this.fyear = endDate.substr(0,4);
-        // this.aday = aux.substr(8,2);
-        // this.amonth = aux.substr(5, 2);
-        // this.ayear = aux.substr(0,4);
-        // //parsing each string date to integer
-        // this.sday = parseInt(this.sday, 10);
-        // this.smonth = parseInt(this.smonth, 10);
-        // this.syear = parseInt(this.syear, 10);
-        // this.fday = parseInt(this.fday, 10);
-        // this.fmonth = parseInt(this.fmonth, 10);
-        // this.fyear = parseInt(this.fyear, 10);
-        // this.aday = parseInt(this.aday, 10);
-        // this.amonth = parseInt(this.amonth, 10);
-        // this.ayear = parseInt(this.ayear, 10);
-        // // debugger
-        // this.esday = this.aday != this.sday;
-        // this.esmonth = this.amonth != this.smonth;
-        // this.esyear = this.ayear != this.syear;
-        // this.efday = this.aday != this.fday;
-        // this.efmonth = this.amonth != this.fmonth;
-        // this.efyear = this.ayear != this.fyear;
-        // this.eday =  this.esday|| this.efday ? true:false;
-        // this.emonth =  this.esmonth|| this.efmonth ? true:false;
-        // this.eyear =  this.eyear|| this.efyear ? true:false;
-        // debugger
-        // this. eyear = new Date(2019, 2, 25);
-        // this. esday = new Date(2025, 2, 25);
-        // if (startDate.substr(10,10) == aux)
-        // {
-        //   this.value = true;
-        // } else if (this.syear <= this.ayear && this.ayear <= this.fyear && this.eyear) {
-        //   if (this.esyear) {
-        //     this.value = this.ayear > this.syear ? true:false;
-        //   }else{
-        //     if (this.ayear < this.fyear) {
-        //       if (this.smonth <= this.amonth && this.amonth <= this.fmonth && this.emonth){
-        //         if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
-        //           this.value = true;
-        //         }else{
-        //           return false;
-        //         }
-        //       }else{
-        //         if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
-        //           this.value = true;
-        //         }else{
-        //           return false;
-        //         }
-        //       }
-        //     }
-        //     this.value = this.ayear <= this.fyear ? true:false;
-        //   }
-        // }else{
-        //   if (this.smonth <= this.amonth && this.amonth <= this.fmonth && this.emonth){
-        //     if (this.esmonth) {
-        //       this.value = this.amonth > this.smonth ? true:false;
-        //     }else{
-        //       if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
-        //         return true;
-        //       }else{
-        //         return false;
-        //       }
-        //     }
-        //   }else{
-        //     if(!this.eyear){
-        //       if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
-        //         return true;
-        //       }else{
-        //         return false;
-        //       }
-        //     }else{
-        //       return true;
-        //     }
-        //   }
-        // }
-        // else if (this.sday <= this.aday && this.aday <= this.fday) 
-        //   if (this.smonth <= this.amonth && this.amonth <= this.fmonth) 
-        //     if (this.syear <= this.ayear && this.ayear <= this.fyear) return true;
     };
     VistaDiariaPage.prototype.sugerencias = function (startDate, aux) {
     };
@@ -1064,7 +964,7 @@ var VistaMensualPage = /** @class */ (function () {
     };
     VistaMensualPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-vista-mensual',template:/*ion-inline-start:"C:\Users\Erick Cutuc\Music\multi\src\pages\vista-mensual\vista-mensual.html"*/'<!--\n\n  Generated template for the VistaMensualPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <ion-navbar>\n\n    <ion-title>\n\n      My Calendar App\n\n    </ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content >\n\n  <div class="all">\n\n    <div class="calendar-header">\n\n      <ion-row class="calendar-month">\n\n        <ion-col col-2 (click)="goToLastMonth()"><ion-icon name="arrow-back"></ion-icon></ion-col>\n\n        <ion-col col-8>{{currentMonth}} {{currentYear}}</ion-col>\n\n        <ion-col col-2 (click)="goToNextMonth()"><ion-icon name="arrow-forward"></ion-icon></ion-col>\n\n      </ion-row>\n\n    </div>\n\n    <div class="calendar-body">\n\n      <ion-grid>\n\n        <ion-row class="calendar-weekday">\n\n          <ion-col>DOM</ion-col>\n\n          <ion-col>LUN</ion-col>\n\n          <ion-col>MAR</ion-col>\n\n          <ion-col>MIÉ</ion-col>\n\n          <ion-col>JUE</ion-col>\n\n          <ion-col>VIE</ion-col>\n\n          <ion-col>SÁB</ion-col>\n\n        </ion-row>\n\n        <ion-row class="calendar-date">\n\n          <ion-col col-1 *ngFor="let lastDay of daysInLastMonth" class="last-month" (click)="vista_diaria(lastDay, this.date.getMonth(), currentYear)">{{lastDay}}</ion-col>\n\n          <ion-col col-1 class="everyDay" *ngFor="let day of daysInThisMonth" (click)="vista_diaria(day, this.date.getMonth(), currentYear)">\n\n            <span class="currentDate"  *ngIf="currentDate === day; else otherDate">{{day}}</span>\n\n            <ng-template #otherDate class="otherDate">{{day}}</ng-template>\n\n          </ion-col>\n\n          <ion-col col-1 *ngFor="let nextDay of daysInNextMonth" class="next-month" (click)="vista_diaria(nextDay, this.date.getMonth(), currentYear)">{{nextDay}}</ion-col>\n\n        </ion-row>\n\n      </ion-grid>\n\n    </div>\n\n  </div>\n\n</ion-content>'/*ion-inline-end:"C:\Users\Erick Cutuc\Music\multi\src\pages\vista-mensual\vista-mensual.html"*/,
+            selector: 'page-vista-mensual',template:/*ion-inline-start:"C:\Users\Erick Cutuc\Music\multi\src\pages\vista-mensual\vista-mensual.html"*/'<!--\n\n  Generated template for the VistaMensualPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <ion-navbar>\n\n    <ion-title>\n\n      My Calendar App\n\n    </ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content >\n\n  <div class="all">\n\n    <div class="calendar-header">\n\n      <ion-row class="calendar-month">\n\n        <ion-col col-2 (click)="goToLastMonth()"><ion-icon name="arrow-back"></ion-icon></ion-col>\n\n        <ion-col col-8>{{currentMonth}} {{currentYear}}</ion-col>\n\n        <ion-col col-2 (click)="goToNextMonth()"><ion-icon name="arrow-forward"></ion-icon></ion-col>\n\n      </ion-row>\n\n    </div>\n\n    <div class="calendar-body">\n\n      <ion-grid>\n\n        <ion-row class="calendar-weekday">\n\n          <ion-col>DOM</ion-col>\n\n          <ion-col>LUN</ion-col>\n\n          <ion-col>MAR</ion-col>\n\n          <ion-col>MIÉ</ion-col>\n\n          <ion-col>JUE</ion-col>\n\n          <ion-col>VIE</ion-col>\n\n          <ion-col>SÁB</ion-col>\n\n        </ion-row>\n\n        <ion-row class="calendar-date">\n\n          <ion-col col-1 *ngFor="let lastDay of daysInLastMonth" class="last-month" (click)="goToLastMonth()">{{lastDay}}</ion-col>\n\n          <ion-col col-1 class="everyDay" *ngFor="let day of daysInThisMonth" (click)="vista_diaria(day, this.date.getMonth(), currentYear)">\n\n            <span class="currentDate"  *ngIf="currentDate === day; else otherDate">{{day}}</span>\n\n            <ng-template #otherDate class="otherDate">{{day}}</ng-template>\n\n          </ion-col>\n\n          <ion-col col-1 *ngFor="let nextDay of daysInNextMonth" class="next-month" (click)="goToNextMonth()">{{nextDay}}</ion-col>\n\n        </ion-row>\n\n      </ion-grid>\n\n    </div>\n\n  </div>\n\n</ion-content>'/*ion-inline-end:"C:\Users\Erick Cutuc\Music\multi\src\pages\vista-mensual\vista-mensual.html"*/,
         }),
         __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]) === "function" && _b || Object])
     ], VistaMensualPage);
