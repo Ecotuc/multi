@@ -172,122 +172,113 @@ export class VistaDiariaPage {
 
   private valid_range(startDate, aux, endDate)
   {
-    //get the day, month and year from each date
-    // debugger
-    this.sday = startDate.substr(8,2);
-    this.smonth = startDate.substr(5, 2);
-    this.syear = startDate.substr(0,4);
-
-    this.fday = endDate.substr(8,2);
-    this.fmonth = endDate.substr(5, 2);
-    this.fyear = endDate.substr(0,4);
-
-    this.aday = aux.substr(8,2);
-    this.amonth = aux.substr(5, 2);
-    this.ayear = aux.substr(0,4);
-
-    //parsing each string date to integer
-    this.sday = parseInt(this.sday, 10);
-    this.smonth = parseInt(this.smonth, 10);
-    this.syear = parseInt(this.syear, 10);
-
-    this.fday = parseInt(this.fday, 10);
-    this.fmonth = parseInt(this.fmonth, 10);
-    this.fyear = parseInt(this.fyear, 10);
-
-    this.aday = parseInt(this.aday, 10);
-    this.amonth = parseInt(this.amonth, 10);
-    this.ayear = parseInt(this.ayear, 10);
-    // debugger
-    this.esday = this.aday != this.sday;
-    this.esmonth = this.amonth != this.smonth;
-    this.esyear = this.ayear != this.syear;
-    this.efday = this.aday != this.fday;
-    this.efmonth = this.amonth != this.fmonth;
-    this.efyear = this.ayear != this.fyear;
-    this.eday =  this.esday|| this.efday ? true:false;
-    this.emonth =  this.esmonth|| this.efmonth ? true:false;
-    this.eyear =  this.eyear|| this.efyear ? true:false;
-    
-    debugger
-    this. eyear = new Date(2019, 2, 25);
-    this. esday = new Date(2025, 2, 25);
-
-
-    if (startDate.substr(10,10) == aux)
-    {
-      this.value = true;
-    } else if (this.syear <= this.ayear && this.ayear <= this.fyear && this.eyear) {
-      if (this.esyear) {
-        this.value = this.ayear > this.syear ? true:false;
-      }else{
-        if (this.ayear < this.fyear) {
-          if (this.smonth <= this.amonth && this.amonth <= this.fmonth && this.emonth){
-            if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
-              this.value = true;
-            }else{
-              return false;
-            }
-          }else{
-            if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
-              this.value = true;
-            }else{
-              return false;
-            }
-          }
-        }
-        this.value = this.ayear <= this.fyear ? true:false;
-      }
-    }else{
-      if (this.smonth <= this.amonth && this.amonth <= this.fmonth && this.emonth){
-        if (this.esmonth) {
-          this.value = this.amonth > this.smonth ? true:false;
-        }else{
-          if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
-            return true;
-          }else{
-            return false;
-          }
-        }
-      }else{
-        if(!this.eyear){
-          if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
-            return true;
-          }else{
-            return false;
-          }
-        }else{
-          return true;
-        }
-
-      }
-    }
-
-
+    startDate = new Date(startDate);
+    aux = new Date(aux);
+    endDate = new Date(endDate);
+    this.value = startDate <= aux &&  aux <= endDate ? true:false;
     return this.value;
 
 
+    //get the day, month and year from each date
+    // debugger
+    // this.sday = startDate.substr(8,2);
+    // this.smonth = startDate.substr(5, 2);
+    // this.syear = startDate.substr(0,4);
 
+    // this.fday = endDate.substr(8,2);
+    // this.fmonth = endDate.substr(5, 2);
+    // this.fyear = endDate.substr(0,4);
 
+    // this.aday = aux.substr(8,2);
+    // this.amonth = aux.substr(5, 2);
+    // this.ayear = aux.substr(0,4);
 
+    // //parsing each string date to integer
+    // this.sday = parseInt(this.sday, 10);
+    // this.smonth = parseInt(this.smonth, 10);
+    // this.syear = parseInt(this.syear, 10);
 
+    // this.fday = parseInt(this.fday, 10);
+    // this.fmonth = parseInt(this.fmonth, 10);
+    // this.fyear = parseInt(this.fyear, 10);
 
-
-
-
-
-
-
-
-
-
-
-
-
+    // this.aday = parseInt(this.aday, 10);
+    // this.amonth = parseInt(this.amonth, 10);
+    // this.ayear = parseInt(this.ayear, 10);
+    // // debugger
+    // this.esday = this.aday != this.sday;
+    // this.esmonth = this.amonth != this.smonth;
+    // this.esyear = this.ayear != this.syear;
+    // this.efday = this.aday != this.fday;
+    // this.efmonth = this.amonth != this.fmonth;
+    // this.efyear = this.ayear != this.fyear;
+    // this.eday =  this.esday|| this.efday ? true:false;
+    // this.emonth =  this.esmonth|| this.efmonth ? true:false;
+    // this.eyear =  this.eyear|| this.efyear ? true:false;
     
+    // debugger
+    // this. eyear = new Date(2019, 2, 25);
+    // this. esday = new Date(2025, 2, 25);
+
+
+    // if (startDate.substr(10,10) == aux)
+    // {
+    //   this.value = true;
+    // } else if (this.syear <= this.ayear && this.ayear <= this.fyear && this.eyear) {
+    //   if (this.esyear) {
+    //     this.value = this.ayear > this.syear ? true:false;
+    //   }else{
+    //     if (this.ayear < this.fyear) {
+    //       if (this.smonth <= this.amonth && this.amonth <= this.fmonth && this.emonth){
+    //         if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
+    //           this.value = true;
+    //         }else{
+    //           return false;
+    //         }
+    //       }else{
+    //         if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
+    //           this.value = true;
+    //         }else{
+    //           return false;
+    //         }
+    //       }
+    //     }
+    //     this.value = this.ayear <= this.fyear ? true:false;
+    //   }
+    // }else{
+    //   if (this.smonth <= this.amonth && this.amonth <= this.fmonth && this.emonth){
+    //     if (this.esmonth) {
+    //       this.value = this.amonth > this.smonth ? true:false;
+    //     }else{
+    //       if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
+    //         return true;
+    //       }else{
+    //         return false;
+    //       }
+    //     }
+    //   }else{
+    //     if(!this.eyear){
+    //       if(this.sday <= this.aday && this.aday <= this.fday && this.eday){
+    //         return true;
+    //       }else{
+    //         return false;
+    //       }
+    //     }else{
+    //       return true;
+    //     }
+
+    //   }
+    // }
+   
     // else if (this.sday <= this.aday && this.aday <= this.fday) 
     //   if (this.smonth <= this.amonth && this.amonth <= this.fmonth) 
     //     if (this.syear <= this.ayear && this.ayear <= this.fyear) return true;
     
   }
+  
+  private sugerencias(startDate, aux)
+  {
+    
+  }
+  
 }
