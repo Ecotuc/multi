@@ -34,7 +34,7 @@ export class VistaDiariaPage {
   fDate = null;
   aday = null;
   value = false;
- 
+  isValid = null;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public eventServices: EventServices) {
     this.uid = navParams.get('uid');
@@ -100,8 +100,6 @@ export class VistaDiariaPage {
 
   private validations()
   { 
-    var isValid = null;  
-    // debugger 
     if (this.day == null || this.month == null || this.year == null) 
     {
       this.theDate = new Date();
@@ -135,11 +133,10 @@ export class VistaDiariaPage {
     this.eventServices.getEvents(this.uid).valueChanges().subscribe(events => 
     {
       this.all_events = events;
-      if (this.all_events.length>0) 
+      if (this.all_events.length > 0) 
       {
         for (let i = 0; i < this.all_events.length; i++) 
         {
-          
           this.sDate = new Date(this.all_events[i].startDate);
           this.sDate.setHours(23,59,59);
           this.aday = parseInt(this.all_events[i].startDate.substr(8,2), 10);
@@ -148,10 +145,9 @@ export class VistaDiariaPage {
           this.fDate.setHours(23,59,59);
           this.aday = parseInt(this.all_events[i].endDate.substr(8,2), 10);
           if(this.aday-1 == this.sDate.getDate()) this.sDate.setDate(this.aday);
-          
-          isValid =  this.valid_range(this.sDate, this.aux, this.fDate);
-          if (isValid)this.events1.push(this.all_events[i]);   
-          // debugger
+
+          this.isValid =  this.valid_range(this.sDate, this.aux, this.fDate);
+          if (this.isValid)this.events1.push(this.all_events[i]);   
         }
       }
     });

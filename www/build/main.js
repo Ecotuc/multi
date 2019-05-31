@@ -219,6 +219,7 @@ var VistaDiariaPage = /** @class */ (function () {
         this.fDate = null;
         this.aday = null;
         this.value = false;
+        this.isValid = null;
         this.uid = navParams.get('uid');
         this.op = navParams.get('op');
         this.day = navParams.get('day');
@@ -277,8 +278,6 @@ var VistaDiariaPage = /** @class */ (function () {
     };
     VistaDiariaPage.prototype.validations = function () {
         var _this = this;
-        var isValid = null;
-        // debugger 
         if (this.day == null || this.month == null || this.year == null) {
             this.theDate = new Date();
             this.day = this.theDate.getDate();
@@ -322,10 +321,9 @@ var VistaDiariaPage = /** @class */ (function () {
                     _this.aday = parseInt(_this.all_events[i].endDate.substr(8, 2), 10);
                     if (_this.aday - 1 == _this.sDate.getDate())
                         _this.sDate.setDate(_this.aday);
-                    isValid = _this.valid_range(_this.sDate, _this.aux, _this.fDate);
-                    if (isValid)
+                    _this.isValid = _this.valid_range(_this.sDate, _this.aux, _this.fDate);
+                    if (_this.isValid)
                         _this.events1.push(_this.all_events[i]);
-                    // debugger
                 }
             }
         });
