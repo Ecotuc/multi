@@ -35,6 +35,9 @@ export class VistaDiariaPage {
   aday = null;
   value = false;
   isValid = null;
+  isSuggest = null;
+  oneDay = 86400000;
+  oneMonth = 2628000000;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public eventServices: EventServices) {
     this.uid = navParams.get('uid');
