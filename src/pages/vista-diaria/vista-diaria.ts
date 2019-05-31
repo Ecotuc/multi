@@ -19,9 +19,10 @@ import { VistaMensualPage } from '../vista-mensual/vista-mensual';
 export class VistaDiariaPage {
 
   all_events = [];
+  events1 = [];
+  sevents = [];
   op = null;
   rep = null;
-  events1 = [];
   uid = null;
   eid = null;
   day = null;
@@ -151,6 +152,8 @@ export class VistaDiariaPage {
 
           this.isValid =  this.valid_range(this.sDate, this.aux, this.fDate);
           if (this.isValid)this.events1.push(this.all_events[i]);   
+
+          this.isSuggest =  this.suggestions(this.sDate, this.aux);
         }
       }
     });
@@ -162,9 +165,18 @@ export class VistaDiariaPage {
     return this.value;    
   }
   
-  private sugerencias(startDate, aux)
+  private suggestions(ostartDate, aux)
   {
-    
+    if (aux.getMonth() != 1) {
+      aux.setMonth(aux.getMonth()-1);
+    }else{
+      aux.setMonth(12);
+    }
+    if (ostartDate.getMonth() == aux.getMonth()) {
+      return true;
+    }else{
+      return false;
+    }
   }
   
 }
