@@ -56,7 +56,14 @@ export class VistaDiariaPage {
   public ionViewWillEnter() 
   {
     this.rep = this.navParams.get('rep');
-    if (this.rep != undefined)this.events1 = this.sevents = [];
+    if (this.rep != undefined)
+    {
+      this.day = this.navParams.get('day') ;
+      this.month = this.navParams.get('month') ;
+      this.year = this.navParams.get('year');
+      this.events1 = this.sevents = [];
+      this.validations();
+    }
   } 
   
   ionViewDidLoad()
@@ -84,6 +91,7 @@ export class VistaDiariaPage {
       if (this.month.length == 1) this.month = "0" + this.month;
       if (this.day.length == 1) this.day = "0" + this.day;
     } else {
+      this.month++;
       this.month = this.month.toString();
       this.day = this.day.toString();
       if (this.month.length == 1) this.month = "0" + this.month;
