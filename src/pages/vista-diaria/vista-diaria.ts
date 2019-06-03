@@ -29,6 +29,7 @@ export class VistaDiariaPage {
   month = null;
   year = null;
   aux = null;
+  hey = null;
   theDate = null;
   theDate2 = null;
   sDate = null;
@@ -37,6 +38,7 @@ export class VistaDiariaPage {
   value = false;
   isValid = null;
   isSuggest = null;
+  ls = null;
   oneDay = 86400000;
   oneMonth = 2628000000;
 
@@ -54,7 +56,7 @@ export class VistaDiariaPage {
   public ionViewWillEnter() 
   {
     this.rep = this.navParams.get('rep');
-    if (this.rep != undefined)this.events1 = [];
+    if (this.rep != undefined)this.events1 = this.sevents = [];
   } 
   
   ionViewDidLoad()
@@ -104,6 +106,7 @@ export class VistaDiariaPage {
 
   private validations()
   { 
+    // debugger
     if (this.day == null || this.month == null || this.year == null) 
     {
       this.theDate = new Date();
@@ -133,6 +136,7 @@ export class VistaDiariaPage {
       this.theDate = new Date(this.year , this.month , this.day, 23, 59, 59);
     }
     this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 
+    this.hey = new Date(this.year, this.month, this.day, 23, 59, 59); 
     this.theDate = this.theDate.toDateString();
     this.eventServices.getEvents(this.uid).valueChanges().subscribe(events => 
     {
@@ -148,12 +152,14 @@ export class VistaDiariaPage {
           this.fDate = new Date(this.all_events[i].endDate);
           this.fDate.setHours(23,59,59);
           this.aday = parseInt(this.all_events[i].endDate.substr(8,2), 10);
-          if(this.aday-1 == this.sDate.getDate()) this.sDate.setDate(this.aday);
+          if(this.aday-1 == this.fDate.getDate()) this.fDate.setDate(this.aday);
 
           this.isValid =  this.valid_range(this.sDate, this.aux, this.fDate);
           if (this.isValid)this.events1.push(this.all_events[i]);   
-
-          this.isSuggest =  this.suggestions(this.sDate, this.aux);
+          // this.xilar = this.aux
+          this.isSuggest = this.suggestions(this.sDate, this.hey);
+          if (this.isSuggest)this.sevents.push(this.all_events[i]);
+          this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 
         }
       }
     });
@@ -165,18 +171,38 @@ export class VistaDiariaPage {
     return this.value;    
   }
   
-  private suggestions(ostartDate, aux)
+  private suggestions(ostartDate, ax)
   {
-    if (aux.getMonth() != 1) {
-      aux.setMonth(aux.getMonth()-1);
-    }else{
-      aux.setMonth(12);
+    this.value = false;
+    ax = new Date(ax - 2714400000);
+    ax.setHours(23,59,59);
+    if (ostartDate.getMonth() == ax.getMonth()) {
+      this.value = ostartDate.getDate() == ax.getDate() ? true:false;
     }
-    if (ostartDate.getMonth() == aux.getMonth()) {
-      return true;
-    }else{
-      return false;
-    }
+    // if (ostartDate.getMonth() == ax.getMonth()) {
+    //   if (ostartDate.getDate() == ax.getDate()) {
+    //     this.value= true;
+    //   }else{
+    //     this.value = false;
+    //   }
+    // }else{
+    //   ax = new Date(this.year, this.month, this.day, 23, 59, 59);
+    //   ax = new Date(ax - 86400000);
+    //   ax.setHours(23, 59, 59);
+    //   if (ostartDate.getDate() == ax.getDate()) {
+    //     ax = new Date(ax - 86400000);
+    //     ax.setHours(23, 59, 59);
+    //     if (ostartDate.getDate() == ax.getDate() && this.ls > 0) {
+    //       this.value = true;
+    //     }else{
+    //       this.value = false;
+    //     }
+    //   }else{
+    //     this.value = false;
+    //   }
+    // }
+
+    return this.value;
   }
   
 }
