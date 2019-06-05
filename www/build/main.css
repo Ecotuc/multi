@@ -25860,7 +25860,7 @@ page-vista-diaria .reales {
 }
 
 page-vista-diaria ion-card-header {
-  background-color: yellow;
+  background-color: #00a2ff;
 }
 
 page-vista-diaria ion-card-content {
@@ -25885,6 +25885,10 @@ page-vista-diaria .newEvent {
   justify-content: flex-end;
 }
 
+page-vista-diaria .delete {
+  margin-top: -5px;
+}
+
 page-vista-diaria .item_event_list {
   display: -webkit-box;
   display: -webkit-flex;
@@ -25898,6 +25902,24 @@ page-vista-diaria .item_event_list {
 
 page-vista-diaria .event_list {
   margin-bottom: 30px;
+}
+
+page-vista-diaria .card-footer {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+page-vista-diaria .dbut {
+  border-radius: 100%;
+  text-align: center;
+  height: 25px;
+  width: 25px;
 }
 
 page-vista-mensual .all {

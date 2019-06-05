@@ -40,8 +40,7 @@ export class CrearEventoPage
 	fhour = null;
 	fminute = null;
 
-	sbackDate = null;
-	ebackDate = null;
+
 	
 	event: any = 
 	{	
@@ -83,8 +82,7 @@ export class CrearEventoPage
 			eventServices.getEventF(this.uid, this.eid).valueChanges()
 			.subscribe(event => {
 				this.event = event;
-				this.sbackDate = this.event.startDate;
-				this.ebackDate = this.event.endDate;
+
 			});
 			this.validateAllDay();
 		}
