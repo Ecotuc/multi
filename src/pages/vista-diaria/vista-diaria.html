@@ -42,22 +42,18 @@
 		Sugerencias
 	</ion-label>
 
-	<ion-item *ngFor="let event of events1">
+	<ion-item *ngFor="let event of sevents">
 		<ion-row>
 	    	<ion-col col-10>
-	    		<ion-card class="sugerencias">
+	    		<ion-card class="sugerencias" (click)="editarEvento(event.id, event.dstartDate)">
 					<ion-card-header>
 			    		<ion-card-title >
 			    			{{ event.title }}
 			    		</ion-card-title>
 					</ion-card-header>
-
-					<ion-card-content>
-				    	{{ event.startDate }}
-					</ion-card-content>
 				</ion-card>
 	    	</ion-col>
-	    	<ion-col col-2 align-self-left text-center>
+	    	<!-- <ion-col col-2 align-self-left text-center>
 	    		<ion-row>
 		    		<button class="simbolo" ion-button icon-only outline item-right clear>
 		        		<ion-icon name="checkmark-circle"></ion-icon>
@@ -68,7 +64,7 @@
 		        		<ion-icon name="close-circle"></ion-icon>
 		       		</button>
 		       	</ion-row>
-	    	</ion-col>
+	    	</ion-col> -->
 		</ion-row>
 	</ion-item>
 </ion-content>
