@@ -25860,7 +25860,7 @@ page-vista-diaria .reales {
 }
 
 page-vista-diaria ion-card-header {
-  background-color: yellow;
+  background-color: #00a2ff;
 }
 
 page-vista-diaria ion-card-content {
@@ -25883,6 +25883,18 @@ page-vista-diaria .newEvent {
   -webkit-justify-content: flex-end;
   -ms-flex-pack: end;
   justify-content: flex-end;
+}
+
+page-vista-diaria .delete {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  margin-top: 30px;
 }
 
 page-vista-diaria .item_event_list {

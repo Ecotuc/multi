@@ -62,11 +62,14 @@ export class CrearEventoPage
 	eid = null;
 	aux = null;
 	daux = null;
+	tt = null;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public eventServices: EventServices) {
 		this.uid = navParams.get('uid');
 		this.eid = navParams.get('eid'); 
 		this.aux = navParams.get('date');
+		this.tt = navParams.get('title');
+		this.event.title = this.tt != undefined ? this.tt:undefined;
 		// this.daux = navParams.get('dstartDate');
 		if (this.aux != undefined) {
 			this.event.startDate = this.aux + "T00:00:00Z";

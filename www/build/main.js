@@ -39,8 +39,8 @@ var EventServices = /** @class */ (function () {
     /**
      * deleteEvent
      */
-    EventServices.prototype.deleteEvent = function (event) {
-        this.afDB.database.ref('events/' + event.id).remove();
+    EventServices.prototype.deleteEvent = function (uid, event) {
+        this.afDB.database.ref('users/' + uid + '/events/' + event.id).remove();
     };
     EventServices.prototype.dalert = function (title, subtitle) {
         var alert = this.alertCtrl.create({
@@ -158,10 +158,9 @@ var HomePage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-home',template:/*ion-inline-start:"C:\Users\Erick Cutuc\Music\multi\src\pages\home\home.html"*/'<ion-header>\n\n    <!-- <script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js" integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH" crossorigin="anonymous"></script> -->\n\n    \n\n    <ion-navbar>\n\n    <ion-title>\n\n      Inicio\n\n    </ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <!-- The world is your oyster.\n\n  <p>\n\n    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.\n\n  </p>\n\n\n\n  <!-- <button ion-button (click) ="goWel()">Ir a wel</button> -->\n\n  <!-- <br><br><br> -->\n\n\n\n  <img class="icon" src="assets/imgs/calendar.svg.png">\n\n  <!-- <br> -->\n\n\n\n  <ion-list padding>\n\n\n\n    <ion-item>\n\n      <ion-label floating>Username</ion-label>\n\n      <ion-input type="text" [(ngModel)]="username"></ion-input>\n\n    </ion-item>\n\n \n\n    <ion-item>\n\n      <ion-label floating>Password</ion-label>\n\n      <ion-input type="password" [(ngModel)]="password"></ion-input>\n\n    </ion-item>\n\n\n\n  </ion-list>\n\n\n\n  \n\n  <div padding>\n\n      <button ion-button block (click)="iniciarSesion()">Iniciar sesión</button>\n\n      <button ion-button block (click)="registrarse()">Registro</button>\n\n    </div>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\Erick Cutuc\Music\multi\src\pages\home\home.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_users_service__["a" /* UsersService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_users_service__["a" /* UsersService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5__angular_fire_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_fire_database__["a" /* AngularFireDatabase */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_2__services_users_service__["a" /* UsersService */], __WEBPACK_IMPORTED_MODULE_5__angular_fire_database__["a" /* AngularFireDatabase */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]])
     ], HomePage);
     return HomePage;
-    var _a, _b, _c, _d;
 }());
 
 //# sourceMappingURL=home.js.map
@@ -204,15 +203,19 @@ var VistaDiariaPage = /** @class */ (function () {
         this.navParams = navParams;
         this.eventServices = eventServices;
         this.all_events = [];
+        this.events1 = [];
+        this.sevents = [];
+        this.eventosAyer = [];
+        this.eventosAnteAyer = [];
         this.op = null;
         this.rep = null;
-        this.events1 = [];
         this.uid = null;
         this.eid = null;
         this.day = null;
         this.month = null;
         this.year = null;
         this.aux = null;
+        this.hey = null;
         this.theDate = null;
         this.theDate2 = null;
         this.sDate = null;
@@ -220,19 +223,32 @@ var VistaDiariaPage = /** @class */ (function () {
         this.aday = null;
         this.value = false;
         this.isValid = null;
+        this.isSuggest = null;
+        this.ls = null;
+        this.oneDay = 86400000;
+        this.oneMonth = 2628000000;
         this.uid = navParams.get('uid');
         this.op = navParams.get('op');
         this.day = navParams.get('day');
         this.month = navParams.get('month');
         this.year = navParams.get('year');
+        this.clear();
         // debugger
-        this.validations();
+        //this.validations();
         // this.navCtrl.setRoot(this.navCtrl.getActive().component);
     }
     VistaDiariaPage.prototype.ionViewWillEnter = function () {
+        this.uid = this.navParams.get('uid');
+        this.op = this.navParams.get('op');
         this.rep = this.navParams.get('rep');
-        if (this.rep != undefined)
-            this.events1 = [];
+        this.day = this.navParams.get('day');
+        this.month = this.navParams.get('month');
+        this.year = this.navParams.get('year');
+        this.clear();
+        /*if (this.rep != undefined)
+        {
+        }*/
+        this.validations();
     };
     VistaDiariaPage.prototype.ionViewDidLoad = function () {
         console.log('ionViewDidLoad VistaDiariaPage');
@@ -257,6 +273,7 @@ var VistaDiariaPage = /** @class */ (function () {
                 this.day = "0" + this.day;
         }
         else {
+            this.month++;
             this.month = this.month.toString();
             this.day = this.day.toString();
             if (this.month.length == 1)
@@ -267,6 +284,37 @@ var VistaDiariaPage = /** @class */ (function () {
         }
         this.aux = this.year + "-" + this.month + "-" + this.day;
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__crear_evento_crear_evento__["a" /* CrearEventoPage */], { uid: this.uid, date: this.aux });
+        this.aux = new Date(this.year, this.month, this.day, 23, 59, 59);
+    };
+    VistaDiariaPage.prototype.newEvent2 = function (title) {
+        if (this.day == null || this.month == null || this.year == null) {
+            this.theDate2 = new Date();
+            this.day = this.theDate2.getDate();
+            this.day = this.theDate2.getDate();
+            this.month = this.theDate2.getMonth() + 1;
+            this.month = this.theDate2.getMonth() + 1;
+            this.year = this.theDate2.getFullYear();
+            this.year = this.theDate2.getFullYear();
+            this.month = this.month.toString();
+            this.day = this.day.toString();
+            if (this.month.length == 1)
+                this.month = "0" + this.month;
+            if (this.day.length == 1)
+                this.day = "0" + this.day;
+        }
+        else {
+            this.month++;
+            this.month = this.month.toString();
+            this.day = this.day.toString();
+            if (this.month.length == 1)
+                this.month = "0" + this.month;
+            if (this.day.length == 1)
+                this.day = "0" + this.day;
+            this.theDate2 = new Date(this.year, this.month, this.day);
+        }
+        this.aux = this.year + "-" + this.month + "-" + this.day;
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__crear_evento_crear_evento__["a" /* CrearEventoPage */], { uid: this.uid, date: this.aux, title: title });
+        this.aux = new Date(this.year, this.month, this.day, 23, 59, 59);
     };
     VistaDiariaPage.prototype.monthly_view = function () {
         if (this.op == 1) {
@@ -276,8 +324,80 @@ var VistaDiariaPage = /** @class */ (function () {
             this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__vista_mensual_vista_mensual__["a" /* VistaMensualPage */], { uid: this.uid });
         }
     };
+    VistaDiariaPage.prototype.clear = function () {
+        this.events1 = [];
+        this.sevents = [];
+    };
+    VistaDiariaPage.prototype.valid_range = function (startDate, aux, endDate) {
+        this.value = startDate <= aux && aux <= endDate ? true : false;
+        return this.value;
+    };
+    VistaDiariaPage.prototype.suggestions = function (ostartDate, ax) {
+        // debugger;
+        this.value = false;
+        ax.setMonth(ax.getMonth() - 1);
+        //    ax.setHours(23,59,59);
+        if (ostartDate.getTime() === ax.getTime()) {
+            this.value = true;
+        }
+        return this.value;
+    };
+    VistaDiariaPage.prototype.suggestionsAyer = function (ostartDate, ax) {
+        this.value = false;
+        ax.setDate(ax.getDate() - 1);
+        if (ostartDate.getTime() === ax.getTime()) {
+            this.value = true;
+        }
+        return this.value;
+    };
+    VistaDiariaPage.prototype.suggestionsAnteAyer = function (ostartDate, ax) {
+        this.value = false;
+        ax.setDate(ax.getDate() - 2);
+        if (ostartDate.getTime() === ax.getTime()) {
+            this.value = true;
+        }
+        return this.value;
+    };
+    VistaDiariaPage.prototype.eliminarEvento = function (event) {
+        this.eventServices.deleteEvent(this.uid, event);
+        //		this.navCtrl.pop();
+    };
+    VistaDiariaPage.prototype.yaExiste = function (sugerencias, evento) {
+        this.value = false;
+        for (var i = 0; i < sugerencias.length; i++) {
+            if (sugerencias[i].title == evento.title) {
+                this.value = false;
+                break;
+            }
+            else {
+                this.value = true;
+            }
+        }
+        return this.value;
+    };
+    VistaDiariaPage.prototype.repeat = function (sDate, ax, repeat, can) {
+        this.value = false;
+        if (!can) {
+            if (repeat != "no") {
+                switch (repeat) {
+                    case "semanas":
+                        this.value = sDate.getDay() == ax.getDay() ? true : false;
+                        break;
+                    case "meses":
+                        this.value = sDate.getDate() == ax.getDate() ? true : false;
+                        break;
+                    case "años":
+                        this.value = sDate.getMonth() == ax.getMonth() ? true : false;
+                        this.value = sDate.getDate() == ax.getDate() && this.value ? true : false;
+                        break;
+                }
+            }
+        }
+        return this.value;
+    };
     VistaDiariaPage.prototype.validations = function () {
         var _this = this;
+        // debugger
         if (this.day == null || this.month == null || this.year == null) {
             this.theDate = new Date();
             this.day = this.theDate.getDate();
@@ -306,10 +426,12 @@ var VistaDiariaPage = /** @class */ (function () {
             this.theDate = new Date(this.year, this.month, this.day, 23, 59, 59);
         }
         this.aux = new Date(this.year, this.month, this.day, 23, 59, 59);
+        this.hey = new Date(this.year, this.month, this.day, 23, 59, 59);
         this.theDate = this.theDate.toDateString();
         this.eventServices.getEvents(this.uid).valueChanges().subscribe(function (events) {
             _this.all_events = events;
             if (_this.all_events.length > 0) {
+                _this.clear();
                 for (var i = 0; i < _this.all_events.length; i++) {
                     _this.sDate = new Date(_this.all_events[i].startDate);
                     _this.sDate.setHours(23, 59, 59);
@@ -319,24 +441,40 @@ var VistaDiariaPage = /** @class */ (function () {
                     _this.fDate = new Date(_this.all_events[i].endDate);
                     _this.fDate.setHours(23, 59, 59);
                     _this.aday = parseInt(_this.all_events[i].endDate.substr(8, 2), 10);
-                    if (_this.aday - 1 == _this.sDate.getDate())
-                        _this.sDate.setDate(_this.aday);
+                    if (_this.aday - 1 == _this.fDate.getDate())
+                        _this.fDate.setDate(_this.aday);
                     _this.isValid = _this.valid_range(_this.sDate, _this.aux, _this.fDate);
                     if (_this.isValid)
                         _this.events1.push(_this.all_events[i]);
+                    _this.isValid = _this.repeat(_this.sDate, _this.aux, _this.all_events[i].repeat, _this.isValid);
+                    if (_this.isValid)
+                        _this.events1.push(_this.all_events[i]);
+                    _this.isSuggest = _this.suggestions(_this.sDate, _this.aux);
+                    if (_this.isSuggest)
+                        _this.sevents.push(_this.all_events[i]);
+                    _this.aux = new Date(_this.year, _this.month, _this.day, 23, 59, 59);
+                    _this.isSuggest = _this.suggestionsAyer(_this.sDate, _this.aux);
+                    if (_this.isSuggest)
+                        _this.eventosAyer.push(_this.all_events[i]);
+                    _this.aux = new Date(_this.year, _this.month, _this.day, 23, 59, 59);
+                    _this.isSuggest = _this.suggestionsAnteAyer(_this.sDate, _this.aux);
+                    if (_this.isSuggest)
+                        _this.eventosAnteAyer.push(_this.all_events[i]);
+                    _this.aux = new Date(_this.year, _this.month, _this.day, 23, 59, 59);
+                    for (var k = 0; k < _this.eventosAyer.length; k++) {
+                        for (var j = 0; j < _this.eventosAnteAyer.length; j++) {
+                            if (_this.eventosAyer[k].title == _this.eventosAnteAyer[j].title)
+                                if (!_this.yaExiste(_this.sevents, _this.eventosAyer[k]))
+                                    _this.sevents.push(_this.eventosAyer[k]);
+                        }
+                    }
                 }
             }
         });
     };
-    VistaDiariaPage.prototype.valid_range = function (startDate, aux, endDate) {
-        this.value = startDate <= aux && aux <= endDate ? true : false;
-        return this.value;
-    };
-    VistaDiariaPage.prototype.sugerencias = function (startDate, aux) {
-    };
     VistaDiariaPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-vista-diaria',template:/*ion-inline-start:"C:\Users\Erick Cutuc\Music\multi\src\pages\vista-diaria\vista-diaria.html"*/'<!--\n\n  Generated template for the VistaDiariaPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n\n\n<ion-header>\n\n  <ion-navbar>\n\n    <ion-title>{{theDate}}</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n	<div class="newEvent">\n\n		<button class="navbutton" icon-only color="light" (click)="monthly_view()">\n\n	  		<ion-icon class="icons" name="md-calendar"></ion-icon>\n\n		</button>\n\n		<button class="navbutton" icon-only color="light" (click)="newEvent()">\n\n	  		<ion-icon class="icons" name="add"></ion-icon>\n\n		</button>\n\n	</div>\n\n	<br><br>\n\n	\n\n	<div class="event_list">\n\n		<div class="item_event_list" *ngFor="let event of events1">\n\n			<ion-card class="reales" (click)="editarEvento(event.id, event.dstartDate)">\n\n				<ion-card-header>\n\n					<ion-card-title >\n\n						{{ event.title }}\n\n					</ion-card-title>\n\n				</ion-card-header>\n\n				\n\n				<ion-card-content>\n\n					{{ event.dstartDate }}\n\n				</ion-card-content>\n\n			</ion-card>\n\n		</div>\n\n	</div>\n\n	\n\n	<ion-label>\n\n		Sugerencias\n\n	</ion-label>\n\n\n\n	<ion-item *ngFor="let event of suggestions">\n\n		<ion-row>\n\n	    	<ion-col col-10>\n\n	    		<ion-card class="sugerencias">\n\n					<ion-card-header>\n\n			    		<ion-card-title >\n\n			    			{{ event.title }}\n\n			    		</ion-card-title>\n\n					</ion-card-header>\n\n\n\n					<ion-card-content>\n\n				    	{{ event.startDate }}\n\n					</ion-card-content>\n\n				</ion-card>\n\n	    	</ion-col>\n\n	    	<ion-col col-2 align-self-left text-center>\n\n	    		<ion-row>\n\n		    		<button class="simbolo" ion-button icon-only outline item-right clear>\n\n		        		<ion-icon name="checkmark-circle"></ion-icon>\n\n		        	</button>\n\n		        </ion-row>\n\n		        <ion-row>\n\n		        	<button class="simbolo" ion-button icon-only outline item-right clear>\n\n		        		<ion-icon name="close-circle"></ion-icon>\n\n		       		</button>\n\n		       	</ion-row>\n\n	    	</ion-col>\n\n		</ion-row>\n\n	</ion-item>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\Erick Cutuc\Music\multi\src\pages\vista-diaria\vista-diaria.html"*/,
+            selector: 'page-vista-diaria',template:/*ion-inline-start:"C:\Users\Erick Cutuc\Music\multi\src\pages\vista-diaria\vista-diaria.html"*/'<!--\n\n  Generated template for the VistaDiariaPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n\n\n<ion-header>\n\n  <ion-navbar>\n\n    <ion-title>{{theDate}}</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n	<div class="newEvent">\n\n		<button class="navbutton" icon-only color="light" (click)="monthly_view()">\n\n	  		<ion-icon class="icons" name="md-calendar"></ion-icon>\n\n		</button>\n\n		<button class="navbutton" icon-only color="light" (click)="newEvent()">\n\n	  		<ion-icon class="icons" name="add"></ion-icon>\n\n		</button>\n\n	</div>\n\n	<br><br>\n\n	\n\n	<div class="event_list">\n\n		<div class="item_event_list" *ngFor="let event of events1">\n\n			<ion-card class="reales" (click)="editarEvento(event.id, event.dstartDate)">\n\n				<ion-card-header>\n\n					<ion-card-title >\n\n						{{ event.title }}\n\n					</ion-card-title>\n\n				</ion-card-header>\n\n				\n\n				<ion-card-content>\n\n					{{ event.dstartDate }}\n\n				</ion-card-content>\n\n			</ion-card>\n\n			<div class="delete">\n\n				<button color="danger" ion-button icon-start (click)="eliminarEvento(event)">\n\n					<ion-icon name="md-trash"></ion-icon>\n\n				</button>\n\n			</div>\n\n		</div>\n\n	</div>\n\n	\n\n	<ion-label>\n\n		Sugerencias\n\n	</ion-label>\n\n\n\n	<ion-item *ngFor="let event of sevents">\n\n		<ion-row>\n\n	    	<ion-col col-10>\n\n	    		<ion-card class="sugerencias" (click)="newEvent2(event.title)">\n\n					<ion-card-header>\n\n			    		<ion-card-title >\n\n			    			{{ event.title }}\n\n			    		</ion-card-title>\n\n					</ion-card-header>\n\n				</ion-card>\n\n	    	</ion-col>\n\n	    	<!-- <ion-col col-2 align-self-left text-center>\n\n	    		<ion-row>\n\n		    		<button class="simbolo" ion-button icon-only outline item-right clear>\n\n		        		<ion-icon name="checkmark-circle"></ion-icon>\n\n		        	</button>\n\n		        </ion-row>\n\n		        <ion-row>\n\n		        	<button class="simbolo" ion-button icon-only outline item-right clear>\n\n		        		<ion-icon name="close-circle"></ion-icon>\n\n		       		</button>\n\n		       	</ion-row>\n\n	    	</ion-col> -->\n\n		</ion-row>\n\n	</ion-item>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\Erick Cutuc\Music\multi\src\pages\vista-diaria\vista-diaria.html"*/,
         }),
         __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__services_events_services__["a" /* EventServices */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_events_services__["a" /* EventServices */]) === "function" && _c || Object])
     ], VistaDiariaPage);
@@ -388,10 +526,10 @@ var map = {
 		305
 	],
 	"../pages/vista-mensual/vista-mensual.module": [
-		303
+		304
 	],
 	"../pages/wel/wel.module": [
-		304
+		303
 	]
 };
 function webpackAsyncContext(req) {
@@ -709,16 +847,19 @@ var CrearEventoPage = /** @class */ (function () {
             location: null,
             allday: null,
             repeat: "no",
-            reminder: "no",
+            //		reminder: "no",
             description: null
         };
         this.uid = null;
         this.eid = null;
         this.aux = null;
         this.daux = null;
+        this.tt = null;
         this.uid = navParams.get('uid');
         this.eid = navParams.get('eid');
         this.aux = navParams.get('date');
+        this.tt = navParams.get('title');
+        this.event.title = this.tt != undefined ? this.tt : undefined;
         // this.daux = navParams.get('dstartDate');
         if (this.aux != undefined) {
             this.event.startDate = this.aux + "T00:00:00Z";
@@ -821,8 +962,9 @@ var CrearEventoPage = /** @class */ (function () {
         this.event.id = 'e' + Date.now();
         if (this.event.title == null ||
             this.event.startDate == null ||
-            this.event.endDate == null ||
-            this.event.reminder == null) {
+            this.event.endDate == null) 
+        //			this.event.reminder == null) 
+        {
             this.eventServices.dalert("Error", "Por favor llene todos los campos");
         }
         else {
@@ -836,18 +978,17 @@ var CrearEventoPage = /** @class */ (function () {
     CrearEventoPage.prototype.editEvent = function () {
         if (this.event.title == "" ||
             this.event.startDate == "" ||
-            this.event.endDate == "" ||
-            this.event.reminder == "") {
+            this.event.endDate == "") 
+        //		this.event.reminder == "") 
+        {
             this.eventServices.dalert("Error", "Por favor llene todos los campos");
         }
         else {
-            if (this.validateTime()) {
-                this.event.dstartDate = this.event.startDate.substr(8, 2) + "-" + this.event.startDate.substr(5, 2) + "-" + this.event.startDate.substr(0, 4);
-                this.eventServices.createEventF(this.uid, this.event);
-                debugger;
-                this.navCtrl.getPrevious().data.rep = 1;
-                this.navCtrl.pop();
-            }
+            this.event.dstartDate = this.event.startDate.substr(8, 2) + "-" + this.event.startDate.substr(5, 2) + "-" + this.event.startDate.substr(0, 4);
+            // this.event.endDate = this.event.endDate.substr(8, 9) + "-" + this.event.endDate.substr(5, 2) + "-" + this.event.endDate.substr(0, 4);
+            this.eventServices.createEventF(this.uid, this.event);
+            this.navCtrl.getPrevious().data.rep = 1;
+            this.navCtrl.pop();
         }
     };
     CrearEventoPage.prototype.ionViewWillEnter = function () {
@@ -855,11 +996,12 @@ var CrearEventoPage = /** @class */ (function () {
     };
     CrearEventoPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-crear-evento',template:/*ion-inline-start:"C:\Users\Erick Cutuc\Music\multi\src\pages\crear-evento\crear-evento.html"*/'<!--\n\n  Generated template for the VerEventoPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <ion-navbar color="primary">\n\n  	<ion-title>Nuevo evento</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n	<div class="top">\n\n		<div class="palette">\n\n			<i class="ico-gray fas fa-palette fa-2x"></i> \n\n		</div>\n\n	</div>\n\n	<div class="form_cei">\n\n\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray far fa-edit fa-lg"></i>\n\n			</div>\n\n			<ion-item>\n\n				<ion-label floating>Título</ion-label>\n\n				<ion-input type="text" [(ngModel)]="event.title"></ion-input>	 \n\n			</ion-item>\n\n		</div>\n\n		\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray fas fa-map-marker-alt fa-lg"></i>\n\n			</div>\n\n			<ion-item>\n\n				<ion-label floating>Dirección</ion-label>\n\n				<ion-input type="text" [(ngModel)]="event.location"></ion-input>\n\n			</ion-item>\n\n		</div>\n\n		\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray fas fa-clock fa-lg"></i>\n\n			</div>\n\n			<ion-item style="display:flex; justify-content: space-around;">\n\n				<ion-input style="display:none;"></ion-input>\n\n				<ion-label style="margin-top: 20px;" ><span>Todo el día</span> </ion-label>\n\n				<ion-checkbox item-right style="margin-top: 15px;" floating (ionChange)="disableTime()" [(ngModel)]="event.allday"></ion-checkbox>\n\n			</ion-item>\n\n		</div>\n\n\n\n		<div id="Time">\n\n			<div class="citem">\n\n				<div class="icon-center">\n\n					<i class="ico-gray fas fa-calendar fa-lg"></i>\n\n				</div>\n\n				<ion-item>\n\n					<ion-label floating>Fecha inicial</ion-label>\n\n					<ion-datetime max="2030-12-31" displayFormat="DD/MMM/YY hh:mm:a" pickerFormat="DD/MMM/YY hh:mm:a" [(ngModel)]="event.startDate"></ion-datetime>\n\n				</ion-item>\n\n			</div>\n\n			\n\n			<div class="citem">\n\n				<div class="icon-center">\n\n					<i class="ico-gray fas fa-calendar fa-lg"></i>\n\n				</div>\n\n				<ion-item>\n\n					<ion-label floating>Fecha final</ion-label>\n\n					<ion-datetime max="2030-12-31" displayFormat="DD/MMM/YY hh:mm:a" pickerFormat="DD/MMM/YY hh:mm:a" (ionChange)="validateTime()" [(ngModel)]="event.endDate"></ion-datetime>\n\n				</ion-item>\n\n			</div>\n\n		</div>\n\n	\n\n	\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray fas fa-retweet fa-lg"></i>\n\n			</div>\n\n			<ion-item>\n\n				<ion-label floating>Repetición</ion-label>\n\n				<ion-select [(ngModel)]="event.repeat"> \n\n					<ion-option value="no">\n\n						No se repite\n\n					</ion-option>\n\n					<ion-option value="dias">\n\n						Todos los días\n\n					</ion-option>\n\n					<ion-option value="semanas">\n\n						Todas las semanas\n\n					</ion-option>\n\n					<ion-option value="meses">\n\n						Todos los meses\n\n					</ion-option>\n\n					<ion-option value="años">\n\n						Todos los años\n\n					</ion-option>\n\n					<!-- <ion-option value="mujer">\n\n						Personalización\n\n					</ion-option> -->\n\n				</ion-select>\n\n			</ion-item>\n\n		</div>\n\n\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray fas fa-bell fa-lg"></i>\n\n			</div>\n\n			<ion-item>\n\n				<ion-label floating>Recordatorio</ion-label>\n\n				<ion-select [(ngModel)]="event.reminder">\n\n					<ion-input type="number" [(ngModel)]="event.tiempoAntes"></ion-input>\n\n					<ion-option value="no">\n\n						Sin recordatorio\n\n					</ion-option>\n\n					<ion-option value="minutos">\n\n						Minutos antes\n\n					</ion-option>\n\n					<ion-option value="horas">\n\n						Horas antes\n\n					</ion-option>\n\n					<ion-option value="dias">\n\n						Días antes\n\n					</ion-option>\n\n					<ion-option value="semanas">\n\n						Semanas antes\n\n					</ion-option>\n\n					<!-- <ion-option value="mujer">\n\n						Personalización\n\n					</ion-option> -->\n\n				</ion-select>\n\n			</ion-item>\n\n		</div>\n\n	\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray fas fa-align-justify fa-lg"></i>\n\n			</div>\n\n			<ion-item>\n\n					<ion-label floating>Descripción</ion-label>\n\n				<ion-textarea [(ngModel)]="event.description"></ion-textarea>\n\n			</ion-item>\n\n		</div>\n\n		\n\n	</div>\n\n\n\n	<br><br>\n\n	\n\n	<div padding>\n\n		<button ion-button block (click)="crearEvento()">Guardar</button>\n\n	</div>\n\n\n\n</ion-content>'/*ion-inline-end:"C:\Users\Erick Cutuc\Music\multi\src\pages\crear-evento\crear-evento.html"*/,
+            selector: 'page-crear-evento',template:/*ion-inline-start:"C:\Users\Erick Cutuc\Music\multi\src\pages\crear-evento\crear-evento.html"*/'<!--\n\n  Generated template for the VerEventoPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <ion-navbar color="primary">\n\n  	<ion-title>Nuevo evento</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n	<!-- <div class="top">\n\n		<div class="palette">\n\n			<i class="ico-gray fas fa-palette fa-2x"></i> \n\n		</div>\n\n	</div> -->\n\n	<div class="form_cei">\n\n\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray far fa-edit fa-lg"></i>\n\n			</div>\n\n			<ion-item>\n\n				<ion-label floating>Título</ion-label>\n\n				<ion-input type="text" [(ngModel)]="event.title"></ion-input>	 \n\n			</ion-item>\n\n		</div>\n\n		\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray fas fa-map-marker-alt fa-lg"></i>\n\n			</div>\n\n			<ion-item>\n\n				<ion-label floating>Dirección</ion-label>\n\n				<ion-input type="text" [(ngModel)]="event.location"></ion-input>\n\n			</ion-item>\n\n		</div>\n\n		\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray fas fa-clock fa-lg"></i>\n\n			</div>\n\n			<ion-item style="display:flex; justify-content: space-around;">\n\n				<ion-input style="display:none;"></ion-input>\n\n				<ion-label style="margin-top: 20px;" ><span>Todo el día</span> </ion-label>\n\n				<ion-checkbox item-right style="margin-top: 15px;" floating (ionChange)="disableTime()" [(ngModel)]="event.allday"></ion-checkbox>\n\n			</ion-item>\n\n		</div>\n\n\n\n		<div id="Time">\n\n			<div class="citem">\n\n				<div class="icon-center">\n\n					<i class="ico-gray fas fa-calendar fa-lg"></i>\n\n				</div>\n\n				<ion-item>\n\n					<ion-label floating>Fecha inicial</ion-label>\n\n					<ion-datetime max="2030-12-31" displayFormat="DD/MMM/YY hh:mm:a" pickerFormat="DD/MMM/YY hh:mm:a" [(ngModel)]="event.startDate"></ion-datetime>\n\n				</ion-item>\n\n			</div>\n\n			\n\n			<div class="citem">\n\n				<div class="icon-center">\n\n					<i class="ico-gray fas fa-calendar fa-lg"></i>\n\n				</div>\n\n				<ion-item>\n\n					<ion-label floating>Fecha final</ion-label>\n\n					<ion-datetime max="2030-12-31" displayFormat="DD/MMM/YY hh:mm:a" pickerFormat="DD/MMM/YY hh:mm:a" (ionChange)="validateTime()" [(ngModel)]="event.endDate"></ion-datetime>\n\n				</ion-item>\n\n			</div>\n\n		</div>\n\n	\n\n	\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray fas fa-retweet fa-lg"></i>\n\n			</div>\n\n			<ion-item>\n\n				<ion-label floating>Repetición</ion-label>\n\n				<ion-select [(ngModel)]="event.repeat"> \n\n					<ion-option value="no">\n\n						No se repite\n\n					</ion-option>\n\n					<ion-option value="dias">\n\n						Todos los días\n\n					</ion-option>\n\n					<ion-option value="semanas">\n\n						Todas las semanas\n\n					</ion-option>\n\n					<ion-option value="meses">\n\n						Todos los meses\n\n					</ion-option>\n\n					<ion-option value="años">\n\n						Todos los años\n\n					</ion-option>\n\n					<!-- <ion-option value="mujer">\n\n						Personalización\n\n					</ion-option> -->\n\n				</ion-select>\n\n			</ion-item>\n\n		</div>\n\n\n\n	\n\n		<div class="citem">\n\n			<div class="icon-center">\n\n				<i class="ico-gray fas fa-align-justify fa-lg"></i>\n\n			</div>\n\n			<ion-item>\n\n					<ion-label floating>Descripción</ion-label>\n\n				<ion-textarea [(ngModel)]="event.description"></ion-textarea>\n\n			</ion-item>\n\n		</div>\n\n		\n\n	</div>\n\n\n\n	<br><br>\n\n	\n\n	<div padding>\n\n		<button ion-button block (click)="crearEvento()">Guardar</button>\n\n	</div>\n\n\n\n</ion-content>'/*ion-inline-end:"C:\Users\Erick Cutuc\Music\multi\src\pages\crear-evento\crear-evento.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__services_events_services__["a" /* EventServices */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__services_events_services__["a" /* EventServices */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_events_services__["a" /* EventServices */]) === "function" && _c || Object])
     ], CrearEventoPage);
     return CrearEventoPage;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=crear-evento.js.map
@@ -951,7 +1093,11 @@ var VistaMensualPage = /** @class */ (function () {
     };
     VistaMensualPage.prototype.vista_diaria = function (day, month, year) {
         // debugger
-        if (day == new Date().getDate().toString()) {
+        if (day == new Date().getDate().toString() && month == new Date().getMonth()) {
+            this.navCtrl.getPrevious().data.rep = 1;
+            this.navCtrl.getPrevious().data.day = day;
+            this.navCtrl.getPrevious().data.month = month + 1;
+            this.navCtrl.getPrevious().data.year = year;
             this.navCtrl.pop();
         }
         else {
@@ -962,10 +1108,9 @@ var VistaMensualPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-vista-mensual',template:/*ion-inline-start:"C:\Users\Erick Cutuc\Music\multi\src\pages\vista-mensual\vista-mensual.html"*/'<!--\n\n  Generated template for the VistaMensualPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <ion-navbar>\n\n    <ion-title>\n\n      My Calendar App\n\n    </ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content >\n\n  <div class="all">\n\n    <div class="calendar-header">\n\n      <ion-row class="calendar-month">\n\n        <ion-col col-2 (click)="goToLastMonth()"><ion-icon name="arrow-back"></ion-icon></ion-col>\n\n        <ion-col col-8>{{currentMonth}} {{currentYear}}</ion-col>\n\n        <ion-col col-2 (click)="goToNextMonth()"><ion-icon name="arrow-forward"></ion-icon></ion-col>\n\n      </ion-row>\n\n    </div>\n\n    <div class="calendar-body">\n\n      <ion-grid>\n\n        <ion-row class="calendar-weekday">\n\n          <ion-col>DOM</ion-col>\n\n          <ion-col>LUN</ion-col>\n\n          <ion-col>MAR</ion-col>\n\n          <ion-col>MIÉ</ion-col>\n\n          <ion-col>JUE</ion-col>\n\n          <ion-col>VIE</ion-col>\n\n          <ion-col>SÁB</ion-col>\n\n        </ion-row>\n\n        <ion-row class="calendar-date">\n\n          <ion-col col-1 *ngFor="let lastDay of daysInLastMonth" class="last-month" (click)="goToLastMonth()">{{lastDay}}</ion-col>\n\n          <ion-col col-1 class="everyDay" *ngFor="let day of daysInThisMonth" (click)="vista_diaria(day, this.date.getMonth(), currentYear)">\n\n            <span class="currentDate"  *ngIf="currentDate === day; else otherDate">{{day}}</span>\n\n            <ng-template #otherDate class="otherDate">{{day}}</ng-template>\n\n          </ion-col>\n\n          <ion-col col-1 *ngFor="let nextDay of daysInNextMonth" class="next-month" (click)="goToNextMonth()">{{nextDay}}</ion-col>\n\n        </ion-row>\n\n      </ion-grid>\n\n    </div>\n\n  </div>\n\n</ion-content>'/*ion-inline-end:"C:\Users\Erick Cutuc\Music\multi\src\pages\vista-mensual\vista-mensual.html"*/,
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]) === "function" && _b || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavParams */]])
     ], VistaMensualPage);
     return VistaMensualPage;
-    var _a, _b;
 }());
 
 //# sourceMappingURL=vista-mensual.js.map
@@ -1129,44 +1274,6 @@ var VerEventoPageModule = /** @class */ (function () {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VistaMensualPageModule", function() { return VistaMensualPageModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vista_mensual__ = __webpack_require__(298);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-
-var VistaMensualPageModule = /** @class */ (function () {
-    function VistaMensualPageModule() {
-    }
-    VistaMensualPageModule = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
-            declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__vista_mensual__["a" /* VistaMensualPage */],
-            ],
-            imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__vista_mensual__["a" /* VistaMensualPage */]),
-            ],
-        })
-    ], VistaMensualPageModule);
-    return VistaMensualPageModule;
-}());
-
-//# sourceMappingURL=vista-mensual.module.js.map
-
-/***/ }),
-
-/***/ 304:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WelPageModule", function() { return WelPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(12);
@@ -1197,6 +1304,44 @@ var WelPageModule = /** @class */ (function () {
 }());
 
 //# sourceMappingURL=wel.module.js.map
+
+/***/ }),
+
+/***/ 304:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VistaMensualPageModule", function() { return VistaMensualPageModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vista_mensual__ = __webpack_require__(298);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+var VistaMensualPageModule = /** @class */ (function () {
+    function VistaMensualPageModule() {
+    }
+    VistaMensualPageModule = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_2__vista_mensual__["a" /* VistaMensualPage */],
+            ],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__vista_mensual__["a" /* VistaMensualPage */]),
+            ],
+        })
+    ], VistaMensualPageModule);
+    return VistaMensualPageModule;
+}());
+
+//# sourceMappingURL=vista-mensual.module.js.map
 
 /***/ }),
 
@@ -1263,7 +1408,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(345);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(348);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_wel_wel_module__ = __webpack_require__(304);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_wel_wel_module__ = __webpack_require__(303);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(616);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_fire__ = __webpack_require__(163);
@@ -1277,7 +1422,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_vista_diaria_vista_diaria_module__ = __webpack_require__(305);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_crear_evento_crear_evento_module__ = __webpack_require__(299);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_ver_evento_ver_evento_module__ = __webpack_require__(302);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pages_vista_mensual_vista_mensual_module__ = __webpack_require__(303);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pages_vista_mensual_vista_mensual_module__ = __webpack_require__(304);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1330,8 +1475,8 @@ var AppModule = /** @class */ (function () {
                         { loadChildren: '../pages/registro1/registro1.module#Registro1PageModule', name: 'Registro1Page', segment: 'registro1', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/registro2/registro2.module#Registro2PageModule', name: 'Registro2Page', segment: 'registro2', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/ver-evento/ver-evento.module#VerEventoPageModule', name: 'VerEventoPage', segment: 'ver-evento', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/vista-mensual/vista-mensual.module#VistaMensualPageModule', name: 'VistaMensualPage', segment: 'vista-mensual', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/wel/wel.module#WelPageModule', name: 'WelPage', segment: 'wel', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/vista-mensual/vista-mensual.module#VistaMensualPageModule', name: 'VistaMensualPage', segment: 'vista-mensual', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/vista-diaria/vista-diaria.module#VistaDiariaPageModule', name: 'VistaDiariaPage', segment: 'vista-diaria', priority: 'low', defaultHistory: [] }
                     ]
                 }),
