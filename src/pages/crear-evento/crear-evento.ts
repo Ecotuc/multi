@@ -223,13 +223,11 @@ export class CrearEventoPage
 			 this.eventServices.dalert("Error","Por favor llene todos los campos");
 		}else
 		{	
-			if (this.validateTime()) {
-				this.event.dstartDate = this.event.startDate.substr(8,2) +"-"+ this.event.startDate.substr(5,2) +"-"+ this.event.startDate.substr(0,4);
-				this.eventServices.createEventF(this.uid, this.event);
-				debugger
-				this.navCtrl.getPrevious().data.rep = 1;
- 				this.navCtrl.pop();
-			}
+			this.event.dstartDate = this.event.startDate.substr(8, 2) + "-" + this.event.startDate.substr(5, 2) + "-" + this.event.startDate.substr(0, 4);
+			// this.event.endDate = this.event.endDate.substr(8, 9) + "-" + this.event.endDate.substr(5, 2) + "-" + this.event.endDate.substr(0, 4);
+			this.eventServices.createEventF(this.uid, this.event);
+			this.navCtrl.getPrevious().data.rep = 1;
+			this.navCtrl.pop();
 
 		}
 	}
