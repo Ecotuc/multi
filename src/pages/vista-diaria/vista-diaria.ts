@@ -185,22 +185,30 @@ export class VistaDiariaPage {
     return this.value;
   }
 
-  // private rWeek(event, ax) 
-  // {
-  //   this.value = false;
-  //   if (event.repeat != "no") 
-  //   {
-  //     switch (event.repeat) {
-  //       case "semanas":
-          
-  //         break;
+  private repeat(sDate, ax, repeat, can) 
+  {
+    this.value = false;
+    if (!can) {
+      if (repeat != "no") 
+      {
+        switch (repeat) {
+          case "semanas":
+            this.value =sDate.getDay() == ax.getDay() ? true:false;
+            break;
+            case "meses":
+              this.value =sDate.getDate() == ax.getDate() ? true:false;
+            break;
+            case "años":
+              this.value =sDate.getMonth() == ax.getMonth() ? true:false;
+              this.value =sDate.getDate() == ax.getDate() && this.value ? true:false;
+            break;
+        }  
+      }
       
-  //       default:
-  //         break;
-  //     }  
-  //   }
+    }
     
-  // }
+    return this.value;
+  }
 
   private validations()
   { 
@@ -254,6 +262,9 @@ export class VistaDiariaPage {
           if(this.aday-1 == this.fDate.getDate()) this.fDate.setDate(this.aday);
 
           this.isValid =  this.valid_range(this.sDate, this.aux, this.fDate);
+          if (this.isValid)this.events1.push(this.all_events[i]); 
+            
+          this.isValid =  this.repeat(this.sDate, this.aux, this.all_events[i].repeat, this.isValid);
           if (this.isValid)this.events1.push(this.all_events[i]);   
 
           this.isSuggest = this.suggestions(this.sDate, this.aux );
