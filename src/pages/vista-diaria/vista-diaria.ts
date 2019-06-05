@@ -21,6 +21,8 @@ export class VistaDiariaPage {
   all_events = [];
   events1 = [];
   sevents = [];
+  eventosAyer = [];
+  eventosAnteAyer = [];
   op = null;
   rep = null;
   uid = null;
@@ -48,16 +50,9 @@ export class VistaDiariaPage {
     this.day = navParams.get('day') ;
     this.month = navParams.get('month');
     this.year = navParams.get('year');
-    this.clear();
     // debugger
     //this.validations();
     // this.navCtrl.setRoot(this.navCtrl.getActive().component);
-  }
-
-  private clear()
-  {
-    this.events1 = [];
-    this.sevents = [];
   }
   
   public ionViewWillEnter() 
@@ -141,6 +136,50 @@ export class VistaDiariaPage {
     return this.value;
   }
 
+  private suggestionsAyer(ostartDate, ax)
+  {
+    this.value = false;
+    ax.setDate(ax.getDate() - 1);
+
+    if (ostartDate.getTime() === ax.getTime()) {
+        this.value = true;
+      }
+
+      return this.value;
+  }
+
+  private suggestionsAnteAyer(ostartDate, ax)
+  {
+    this.value = false;
+    ax.setDate(ax.getDate() - 2);
+
+    if (ostartDate.getTime() === ax.getTime()) {
+        this.value = true;
+      }
+
+      return this.value;
+  }
+
+  private yaExiste(sugerencias, evento)
+  {
+    this.value = false;
+
+    for(let i = 0; i < sugerencias.length; i++)
+    {
+      if(sugerencias[i].title == evento.title)
+      {
+        this.value = false;
+        break;
+      }
+      else
+      {
+        this.value = true;
+      }
+    }
+
+    return this.value;
+  }
+
   private validations()
   { 
     // debugger
@@ -198,6 +237,23 @@ export class VistaDiariaPage {
           this.isSuggest = this.suggestions(this.sDate, this.aux );
           if (this.isSuggest)this.sevents.push(this.all_events[i]);
           this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 
+          
+          this.isSuggest = this.suggestionsAyer(this.sDate, this.aux );
+          if (this.isSuggest)this.eventosAyer.push(this.all_events[i]);
+          this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 
+          
+          this.isSuggest = this.suggestionsAnteAyer(this.sDate, this.aux );
+          if (this.isSuggest)this.eventosAnteAyer.push(this.all_events[i]);
+          this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 
+          
+          for(let k = 0; k < this.eventosAyer.length; k++)
+          {
+            for(let j = 0; j < this.eventosAnteAyer.length; j++)
+            {
+              if(this.eventosAyer[k].title == this.eventosAnteAyer[j].title)
+                if(!this.yaExiste(this.sevents, this.eventosAyer[k])) this.sevents.push(this.eventosAyer[k]);
+            }
+          }
         }
       }
     });

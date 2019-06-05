@@ -54,7 +54,7 @@ export class CrearEventoPage
 		location: null,
 		allday: null,
 		repeat: "no",
-		reminder: "no",
+//		reminder: "no",
 		description: null
 	};
 	
@@ -198,8 +198,8 @@ export class CrearEventoPage
 		this.event.id = 'e'+ Date.now();
 		if (this.event.title == null ||
 			this.event.startDate == null ||
-			this.event.endDate == null ||
-			this.event.reminder == null) 
+			this.event.endDate == null)
+			//			this.event.reminder == null) 
 		{
 			 this.eventServices.dalert("Error","Por favor llene todos los campos");
 		}
@@ -218,8 +218,8 @@ export class CrearEventoPage
 	{
 		if (this.event.title == "" ||
 		this.event.startDate == "" ||
-		this.event.endDate == "" ||
-		this.event.reminder == "") {
+		this.event.endDate == "")
+//		this.event.reminder == "") {
 			 this.eventServices.dalert("Error","Por favor llene todos los campos");
 		}else
 		{	
