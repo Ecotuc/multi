@@ -50,6 +50,7 @@ export class VistaDiariaPage {
     this.day = navParams.get('day') ;
     this.month = navParams.get('month');
     this.year = navParams.get('year');
+    this.clear();
     // debugger
     //this.validations();
     // this.navCtrl.setRoot(this.navCtrl.getActive().component);
@@ -63,8 +64,7 @@ export class VistaDiariaPage {
     this.day = this.navParams.get('day') ;
     this.month = this.navParams.get('month') ;
     this.year = this.navParams.get('year');
-    this.events1 = [];
-    this.sevents = [];
+    this.clear();
     /*if (this.rep != undefined)
     {
     }*/
@@ -116,6 +116,11 @@ export class VistaDiariaPage {
     {
       this.navCtrl.push(VistaMensualPage, { uid: this.uid });
     }
+  }
+
+  private clear() {
+    this.events1 = [];
+    this.sevents = [];
   }
 
   private valid_range(startDate, aux, endDate)
@@ -180,6 +185,23 @@ export class VistaDiariaPage {
     return this.value;
   }
 
+  // private rWeek(event, ax) 
+  // {
+  //   this.value = false;
+  //   if (event.repeat != "no") 
+  //   {
+  //     switch (event.repeat) {
+  //       case "semanas":
+          
+  //         break;
+      
+  //       default:
+  //         break;
+  //     }  
+  //   }
+    
+  // }
+
   private validations()
   { 
     // debugger
@@ -219,6 +241,7 @@ export class VistaDiariaPage {
       this.all_events = events;
       if (this.all_events.length > 0) 
       {
+        this.clear();
         for (let i = 0; i < this.all_events.length; i++) 
         {
           this.sDate = new Date(this.all_events[i].startDate);
@@ -232,8 +255,7 @@ export class VistaDiariaPage {
 
           this.isValid =  this.valid_range(this.sDate, this.aux, this.fDate);
           if (this.isValid)this.events1.push(this.all_events[i]);   
-          // this.xilar = this.aux
-         // debugger;
+
           this.isSuggest = this.suggestions(this.sDate, this.aux );
           if (this.isSuggest)this.sevents.push(this.all_events[i]);
           this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 

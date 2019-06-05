@@ -232,6 +232,7 @@ var VistaDiariaPage = /** @class */ (function () {
         this.day = navParams.get('day');
         this.month = navParams.get('month');
         this.year = navParams.get('year');
+        this.clear();
         // debugger
         //this.validations();
         // this.navCtrl.setRoot(this.navCtrl.getActive().component);
@@ -243,8 +244,7 @@ var VistaDiariaPage = /** @class */ (function () {
         this.day = this.navParams.get('day');
         this.month = this.navParams.get('month');
         this.year = this.navParams.get('year');
-        this.events1 = [];
-        this.sevents = [];
+        this.clear();
         /*if (this.rep != undefined)
         {
         }*/
@@ -294,6 +294,10 @@ var VistaDiariaPage = /** @class */ (function () {
             this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__vista_mensual_vista_mensual__["a" /* VistaMensualPage */], { uid: this.uid });
         }
     };
+    VistaDiariaPage.prototype.clear = function () {
+        this.events1 = [];
+        this.sevents = [];
+    };
     VistaDiariaPage.prototype.valid_range = function (startDate, aux, endDate) {
         this.value = startDate <= aux && aux <= endDate ? true : false;
         return this.value;
@@ -337,6 +341,19 @@ var VistaDiariaPage = /** @class */ (function () {
         }
         return this.value;
     };
+    // private rWeek(event, ax) 
+    // {
+    //   this.value = false;
+    //   if (event.repeat != "no") 
+    //   {
+    //     switch (event.repeat) {
+    //       case "semanas":
+    //         break;
+    //       default:
+    //         break;
+    //     }  
+    //   }
+    // }
     VistaDiariaPage.prototype.validations = function () {
         var _this = this;
         // debugger
@@ -373,6 +390,7 @@ var VistaDiariaPage = /** @class */ (function () {
         this.eventServices.getEvents(this.uid).valueChanges().subscribe(function (events) {
             _this.all_events = events;
             if (_this.all_events.length > 0) {
+                _this.clear();
                 for (var i = 0; i < _this.all_events.length; i++) {
                     _this.sDate = new Date(_this.all_events[i].startDate);
                     _this.sDate.setHours(23, 59, 59);
@@ -387,8 +405,6 @@ var VistaDiariaPage = /** @class */ (function () {
                     _this.isValid = _this.valid_range(_this.sDate, _this.aux, _this.fDate);
                     if (_this.isValid)
                         _this.events1.push(_this.all_events[i]);
-                    // this.xilar = this.aux
-                    // debugger;
                     _this.isSuggest = _this.suggestions(_this.sDate, _this.aux);
                     if (_this.isSuggest)
                         _this.sevents.push(_this.all_events[i]);
