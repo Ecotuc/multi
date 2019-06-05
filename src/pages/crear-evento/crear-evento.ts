@@ -95,15 +95,6 @@ export class CrearEventoPage
 		console.log('ionViewDidLoad CrearEventoPage');
 	}
 
-	eliminarEvento()
-	{
-		if(this.eid != undefined)
-		{
-			this.eventServices.deleteEvent(this.uid, this.event);
-		}
-		this.navCtrl.pop();
-	}
-
   	disableTime()
 	{
 		var x = document.getElementById("Time");

@@ -35,6 +35,11 @@
 					{{ event.dstartDate }}
 				</ion-card-content>
 			</ion-card>
+			<div class="delete">
+				<button color="danger" ion-button icon-start (click)="eliminarEvento(event)">
+					<ion-icon name="md-trash"></ion-icon>
+				</button>
+			</div>
 		</div>
 	</div>
 	
