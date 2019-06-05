@@ -25,8 +25,8 @@ export class EventServices{
     /**
      * deleteEvent
      */
-    public deleteEvent(event) {
-        this.afDB.database.ref('events/' + event.id).remove();
+    public deleteEvent(uid, event) {
+        this.afDB.database.ref('users/'+uid+'/events/' + event.id).remove();
     }
 
     public dalert(title, subtitle) {
