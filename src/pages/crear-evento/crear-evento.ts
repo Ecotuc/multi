@@ -219,7 +219,8 @@ export class CrearEventoPage
 		if (this.event.title == "" ||
 		this.event.startDate == "" ||
 		this.event.endDate == "")
-//		this.event.reminder == "") {
+//		this.event.reminder == "") 
+		{
 			 this.eventServices.dalert("Error","Por favor llene todos los campos");
 		}else
 		{	
