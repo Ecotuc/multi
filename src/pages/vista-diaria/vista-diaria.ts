@@ -21,6 +21,8 @@ export class VistaDiariaPage {
   all_events = [];
   events1 = [];
   sevents = [];
+  eventosAyer = [];
+  eventosAnteAyer = [];
   op = null;
   rep = null;
   uid = null;
@@ -53,12 +55,6 @@ export class VistaDiariaPage {
     //this.validations();
     // this.navCtrl.setRoot(this.navCtrl.getActive().component);
   }
-
-  private clear()
-  {
-    this.events1 = [];
-    this.sevents = [];
-  }
   
   public ionViewWillEnter() 
   {
@@ -68,8 +64,7 @@ export class VistaDiariaPage {
     this.day = this.navParams.get('day') ;
     this.month = this.navParams.get('month') ;
     this.year = this.navParams.get('year');
-    this.events1 = [];
-    this.sevents = [];
+    this.clear();
     /*if (this.rep != undefined)
     {
     }*/
@@ -110,6 +105,7 @@ export class VistaDiariaPage {
     }
     this.aux = this.year + "-" + this.month + "-" + this.day;
     this.navCtrl.push(CrearEventoPage, { uid: this.uid, date: this.aux });
+    this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 
   }
 
   monthly_view()
@@ -122,6 +118,11 @@ export class VistaDiariaPage {
     }
   }
 
+  private clear() {
+    this.events1 = [];
+    this.sevents = [];
+  }
+
   private valid_range(startDate, aux, endDate)
   {
     this.value = startDate <= aux &&  aux <= endDate ? true:false;
@@ -130,7 +131,7 @@ export class VistaDiariaPage {
   
   private suggestions(ostartDate, ax)
   {
-    debugger;
+    // debugger;
     this.value = false;
     ax.setMonth(ax.getMonth() - 1);
 //    ax.setHours(23,59,59);
@@ -139,6 +140,67 @@ export class VistaDiariaPage {
     }
     return this.value;
   }
+
+  private suggestionsAyer(ostartDate, ax)
+  {
+    this.value = false;
+    ax.setDate(ax.getDate() - 1);
+
+    if (ostartDate.getTime() === ax.getTime()) {
+        this.value = true;
+      }
+
+      return this.value;
+  }
+
+  private suggestionsAnteAyer(ostartDate, ax)
+  {
+    this.value = false;
+    ax.setDate(ax.getDate() - 2);
+
+    if (ostartDate.getTime() === ax.getTime()) {
+        this.value = true;
+      }
+
+      return this.value;
+  }
+
+  private yaExiste(sugerencias, evento)
+  {
+    this.value = false;
+
+    for(let i = 0; i < sugerencias.length; i++)
+    {
+      if(sugerencias[i].title == evento.title)
+      {
+        this.value = false;
+        break;
+      }
+      else
+      {
+        this.value = true;
+      }
+    }
+
+    return this.value;
+  }
+
+  // private rWeek(event, ax) 
+  // {
+  //   this.value = false;
+  //   if (event.repeat != "no") 
+  //   {
+  //     switch (event.repeat) {
+  //       case "semanas":
+          
+  //         break;
+      
+  //       default:
+  //         break;
+  //     }  
+  //   }
+    
+  // }
 
   private validations()
   { 
@@ -179,6 +241,7 @@ export class VistaDiariaPage {
       this.all_events = events;
       if (this.all_events.length > 0) 
       {
+        this.clear();
         for (let i = 0; i < this.all_events.length; i++) 
         {
           this.sDate = new Date(this.all_events[i].startDate);
@@ -192,11 +255,27 @@ export class VistaDiariaPage {
 
           this.isValid =  this.valid_range(this.sDate, this.aux, this.fDate);
           if (this.isValid)this.events1.push(this.all_events[i]);   
-          // this.xilar = this.aux
-         // debugger;
+
           this.isSuggest = this.suggestions(this.sDate, this.aux );
           if (this.isSuggest)this.sevents.push(this.all_events[i]);
           this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 
+          
+          this.isSuggest = this.suggestionsAyer(this.sDate, this.aux );
+          if (this.isSuggest)this.eventosAyer.push(this.all_events[i]);
+          this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 
+          
+          this.isSuggest = this.suggestionsAnteAyer(this.sDate, this.aux );
+          if (this.isSuggest)this.eventosAnteAyer.push(this.all_events[i]);
+          this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 
+          
+          for(let k = 0; k < this.eventosAyer.length; k++)
+          {
+            for(let j = 0; j < this.eventosAnteAyer.length; j++)
+            {
+              if(this.eventosAyer[k].title == this.eventosAnteAyer[j].title)
+                if(!this.yaExiste(this.sevents, this.eventosAyer[k])) this.sevents.push(this.eventosAyer[k]);
+            }
+          }
         }
       }
     });

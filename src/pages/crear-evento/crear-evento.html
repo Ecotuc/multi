@@ -13,7 +13,9 @@
 <ion-content padding>
 	<div class="top">
 		<div class="palette">
-			<i class="ico-gray fas fa-palette fa-2x"></i> 
+			<button *ngIf="eid != undefined" ion-button icon-start (click)="eliminarEvento()">
+				<ion-icon name="md-trash"></ion-icon>
+			</button>
 		</div>
 	</div>
 	<div class="form_cei">
@@ -101,35 +103,6 @@
 			</ion-item>
 		</div>
 
-		<div class="citem">
-			<div class="icon-center">
-				<i class="ico-gray fas fa-bell fa-lg"></i>
-			</div>
-			<ion-item>
-				<ion-label floating>Recordatorio</ion-label>
-				<ion-select [(ngModel)]="event.reminder">
-					<ion-input type="number" [(ngModel)]="event.tiempoAntes"></ion-input>
-					<ion-option value="no">
-						Sin recordatorio
-					</ion-option>
-					<ion-option value="minutos">
-						Minutos antes
-					</ion-option>
-					<ion-option value="horas">
-						Horas antes
-					</ion-option>
-					<ion-option value="dias">
-						Días antes
-					</ion-option>
-					<ion-option value="semanas">
-						Semanas antes
-					</ion-option>
-					<!-- <ion-option value="mujer">
-						Personalización
-					</ion-option> -->
-				</ion-select>
-			</ion-item>
-		</div>
 	
 		<div class="citem">
 			<div class="icon-center">
