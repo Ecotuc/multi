@@ -110,6 +110,7 @@ export class VistaDiariaPage {
     }
     this.aux = this.year + "-" + this.month + "-" + this.day;
     this.navCtrl.push(CrearEventoPage, { uid: this.uid, date: this.aux });
+    this.aux = new Date(this.year, this.month, this.day, 23, 59, 59); 
   }
 
   monthly_view()
@@ -130,7 +131,7 @@ export class VistaDiariaPage {
   
   private suggestions(ostartDate, ax)
   {
-    debugger;
+    // debugger;
     this.value = false;
     ax.setMonth(ax.getMonth() - 1);
 //    ax.setHours(23,59,59);
