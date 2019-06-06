@@ -40,17 +40,17 @@ export class UsersService{
 
     public createUserF(user) {
         this.afDB.database.ref('users/' + user.id).set(user);
-        this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password)
-        .then((response) =>
-        {
-            console.log("Usuario creado")
-        })
-        .catch((error) => 
-        {
-            console.log("entró");
+        // this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password)
+        // .then((response) =>
+        // {
+        //     console.log("Usuario creado")
+        // })
+        // .catch((error) => 
+        // {
+        //     console.log("entró");
             
-            console.log('Error: ', error);
-        });
+        //     console.log('Error: ', error);
+        // });
     }
 
     public editUser(user) {

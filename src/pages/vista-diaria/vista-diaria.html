@@ -24,22 +24,22 @@
 	
 	<div class="event_list">
 		<div class="item_event_list" *ngFor="let event of events1">
-			<ion-card class="reales" (click)="editarEvento(event.id, event.dstartDate)">
-				<ion-card-header>
+			<ion-card class="reales">
+				<ion-card-header  (click)="editarEvento(event.id, event.dstartDate)">
 					<ion-card-title >
 						{{ event.title }}
 					</ion-card-title>
 				</ion-card-header>
 				
-				<ion-card-content>
+				<ion-card-content class= "card-footer">
 					{{ event.dstartDate }}
+						<div class="delete">
+							<div color="danger" class="dbut" ion-button icon-center (click)="eliminarEvento(event)">
+								<ion-icon name="md-trash"></ion-icon>
+							</div>
+						</div>
 				</ion-card-content>
 			</ion-card>
-			<div class="delete">
-				<button color="danger" ion-button icon-start (click)="eliminarEvento(event)">
-					<ion-icon name="md-trash"></ion-icon>
-				</button>
-			</div>
 		</div>
 	</div>
 	
@@ -58,18 +58,6 @@
 					</ion-card-header>
 				</ion-card>
 	    	</ion-col>
-	    	<!-- <ion-col col-2 align-self-left text-center>
-	    		<ion-row>
-		    		<button class="simbolo" ion-button icon-only outline item-right clear>
-		        		<ion-icon name="checkmark-circle"></ion-icon>
-		        	</button>
-		        </ion-row>
-		        <ion-row>
-		        	<button class="simbolo" ion-button icon-only outline item-right clear>
-		        		<ion-icon name="close-circle"></ion-icon>
-		       		</button>
-		       	</ion-row>
-	    	</ion-col> -->
 		</ion-row>
 	</ion-item>
 </ion-content>

@@ -40,8 +40,6 @@ export class CrearEventoPage
 	fhour = null;
 	fminute = null;
 
-	sbackDate = null;
-	ebackDate = null;
 	
 	event: any = 
 	{	
@@ -74,20 +72,12 @@ export class CrearEventoPage
 		if (this.aux != undefined) {
 			this.event.startDate = this.aux + "T00:00:00Z";
 		}
-		// else
-		// {
-		// 	this.aux = this.daux.substr(6,4) +"-"+ this.daux.substr(3,2) + "-" + this.daux.substr(0,2);
-		// }
-		
-		// this.daux = this.aux.substr(8,9) + "-" + this.aux.substr(5,2) + "-" +this.aux.substr(0,4) ;
 
 		if (this.eid != undefined) 
 		{
 			eventServices.getEventF(this.uid, this.eid).valueChanges()
 			.subscribe(event => {
 				this.event = event;
-				this.sbackDate = this.event.startDate;
-				this.ebackDate = this.event.endDate;
 			});
 			this.validateAllDay();
 		}
